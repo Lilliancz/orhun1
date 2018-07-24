@@ -1,0 +1,51 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Overall Results
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        window.onload = function () 
+        {
+            document.getElementById("arrive_time").value = (new Date()).toISOString();
+        }
+    </script>
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <!DOCTYPE html>
+    <html>
+        <body>
+            <input type="hidden" name="time_Results" id="arrive_time"/>
+            <p>
+                In the baseline task, you attempted {{ bl_attempted }} {{ bl_problems }} and got {{ bl_score }} correct.
+                <br>
+                In Game 1, you attempted {{ g1_attempted }} {{ g1_problems }} and got {{ g1_score }} correct.
+                <br>
+                In Game 2, you attempted {{ g2_attempted }} {{ g2_problems }} and got {{ g2_score }} correct.
+            </p>
+            <p>
+                In Game 1, you ranked {{ g1_rank }} out of 3 players. Your bonus for Game 1 is {{ g1_bonus }}.
+                <br>
+                In Game 2, you ranked {{ g2_rank }} out of 3 players. Your bonus for Game 2 is {{ g2_bonus }}.
+            </p>
+            <p>
+                Your total payment is {{ total_bonus }}
+            </p>
+            <br>
+        </body>
+    </html>
+
+    {% next_button %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Instructions (Part 2)
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        window.onload = function () 
+        {
+            document.getElementById("arrive_time").value = (new Date()).toISOString();
+        }
+    </script>
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    
+    <!DOCTYPE html>
+    <html>
+        <body>
+            <input type="hidden" name="time_Instructions" id="arrive_time"/>
+            <p>
+                Thank you for your participation. Now, we move onto Part 2 of the study. Please read these instructions carefully.
+                <br><br>
+                In this part, you will compete with two other players in a sequence of tasks like the one you saw earlier. Each player will have two minutes to complete as many problems <b>correctly</b> as possible.  Your competitors will get the exact same problems that you will get. After the two minutes are up, the player who has the most correct answers wins first place and a prize of <b>$2.5</b>.  The player with the second most correct answers gets second place and wins a prize of <b>$1</b>. The player with the least number of correct answers gets third place and wins nothing. 
+                <br><br>
+                Therefore, it is important to <u>do your very best in the two minutes you have</u>. You will again see the clock counting down the time you have left.
+            </p>
+        </body>
+    </html>
+
+    {% next_button %}
+{% endblock %}
+
+

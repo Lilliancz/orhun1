@@ -1,0 +1,34 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        window.onload = function () 
+        {
+            document.getElementById("arrive_time").value = (new Date()).toISOString()
+        }
+
+    </script>
+{% endblock %}
+
+
+{% block title %}
+    Survey
+{% endblock %}
+
+{% block content %}
+    
+    <input type="hidden" name="time_Survey45" id="arrive_time"/>
+
+    {% if id == 1 %}
+        
+    {% else %}
+
+    {% endif %}
+
+    {% next_button %}
+
+{% endblock %}
+
+
+
