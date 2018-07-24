@@ -110,7 +110,7 @@ DEBUG = (environ.get('OTREE_PRODUCTION') in {None, '', '0'})
 DEMO_PAGE_INTRO_HTML = """ """
 
 # don't share this with anybody.
-SECRET_KEY = 'f8ho&pte=i&(vr-z0@2dw(z=4z&sg^o=30tjt)$v=lhd3j0dl*'
+SECRET_KEY = ''
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
