@@ -12,6 +12,33 @@ class Game1WaitPage(WaitPage):
     def after_all_players_arrive(self):
         pass
 
+class WhatHappensNextA(Page):
+    form_model = 'player'
+    timeout_seconds = 120
+	
+    def is_displayed(self):
+        return self.player.id_in_group == 1
+    
+    def vars_for_template(self):
+        return {
+            'firm': self.player.participant.vars['firm']
+        }
+		
+
+class WhatHappensNextB(Page):
+    form_model = 'player'
+    timeout_seconds = 120
+
+	def is_displayed(self):
+        return self.player.id_in_group != 1
+
+    
+    def vars_for_template(self):
+        return {
+            'firm': self.player.participant.vars['firm']
+        }
+				
+		
 # one player in each group chooses firm A or firm B
 class ChooseFirm(Page):
     form_model = 'player'
@@ -164,6 +191,8 @@ class Survey_group(Page):
 
 page_sequence = [
     Game1WaitPage,
+	WhatHappensNextA,
+	WhatHappensNextB,
     ChooseFirm,
     #Survey4,
     Survey_group,

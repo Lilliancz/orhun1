@@ -39,22 +39,27 @@
 {% endblock %}
 
 {% block content %}
-    
-    <input type="hidden" name="time_Survey" id="arrive_time"/>
+    Relative to how well you actually did, what was your performance judgment after you completed the task?
+    <input type="hidden" name="time_Survey1" id="arrive_time"/>
+    <br><br>
 
     <input class="slider" name="q1" type="range" min="0" max="10" value="5"/>
+
     <br>
-    <div class="col-2">
-        <p>
-            Much lower than I expected
-        </p>
+    <div class="row">
+        <div class="col-2">
+            I expected a lower score than what I got
+        </div>
+        <div class="col-2">
+            I performed just as well as I expected
+        </div>
+        <div class="col-2" style="text-align: right">
+            I expected a higher score than what I got
+        </div>
     </div>
-    <div class="col-2">
-        What I expected
-    </div>
-    <div class="col-2">
-        Much higher than I expected
-    </div>
+    <br>
+    <br>
+
 
     {% next_button %}
 
