@@ -2,7 +2,7 @@
 {% load otree static %}
 
 {% block title %}
-    Part 1 Results
+    Thank you
 {% endblock %}
 
 {% block scripts %}
@@ -27,14 +27,23 @@
     <!DOCTYPE html>
     <html>
         <body>
-            <input type="hidden" name="time_ResultsBL" id="arrive_time"/>
+            <input type="hidden" name="time_Results1" id="arrive_time"/>
             <p>
-                Thank you for your effort! Two minutes has elapsed.
+
+                Thank you for participating in this competition.
                 <br><br>
                 You attempted {{ attempted }} {{ problems }} and answered {{ correct }} of them correctly.
                 <br><br>
                 Each correct question earned you 5 cents. <BR>
 				Therefore, your bonus payment from Part 1 is {{ earnings }} .
+                Please click next to answer a few questions. After completing that page, you will be told about how your performance compared to the others in your firm.
+
+
+                In part 1,  you attempted x, and got y questions correct. Each correct question earned you 5 cents. As a result, your bonus from part 1 is xx.
+In the competition, you attempted x, and got y questions correct. You ranked x out of 3 players. As a result, your bonus from the competition is xx.
+In total, with your participation payment, you will be paid zz.
+
+
             </p>
         </body>
     </html>

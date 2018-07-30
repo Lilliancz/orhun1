@@ -18,27 +18,13 @@ class WhatHappensNextA(Page):
 	
     def is_displayed(self):
         return self.player.id_in_group == 1
-    
-    def vars_for_template(self):
-        return {
-            'firm': self.player.participant.vars['firm']
-        }
-		
 
 class WhatHappensNextB(Page):
     form_model = 'player'
     timeout_seconds = 120
+    def is_displayed(self):
+        return self.player.role() == 'notchooser'
 
-	def is_displayed(self):
-        return self.player.id_in_group != 1
-
-    
-    def vars_for_template(self):
-        return {
-            'firm': self.player.participant.vars['firm']
-        }
-				
-		
 # one player in each group chooses firm A or firm B
 class ChooseFirm(Page):
     form_model = 'player'
@@ -67,13 +53,13 @@ class ChooseFirm(Page):
             p.firm = self.player.firm
 
 # wait page for all 3 group members
-class Instructions1WaitPage(WaitPage):
-    pass
+class Game1FirmWaitPage(WaitPage):
+    body_text = "Please wait while other participants are finishing up. You will begin the competition when all three participants have arrived to this page. Please do not leave, the wait should not be long. If you are inactive for a while, you will be kicked out of the study and not get any bonus."
 
-# instructions for game 1
-class Instructions1(Page):
+# Show firm for game 1
+class Game1Firm(Page):
     form_model = 'player'
-    form_fields = ['time_Instructions1']
+    form_fields = ['time_Game1Firm']
     timeout_seconds = 60
     
     def vars_for_template(self):
@@ -107,6 +93,9 @@ class Game1(Page):
     def before_next_page(self):
         self.player.participant.vars['game1_attempted'] = self.player.attempted
         self.player.participant.vars['game1_score'] = self.player.game1_score
+        self.player.game1_earnings = .05 * self.player.game1_score
+        self.player.participant.vars['game1_earnings'] = self.player.game1_earnings
+        self.participant.payoff = self.player.game1_earnings
 
 class Results1WaitPage(WaitPage):
     
@@ -121,20 +110,26 @@ class Results1WaitPage(WaitPage):
         players = sorted(random.sample([p1, p2, p3], k=3), key=lambda x: x.game1_score, reverse = True)
 
         for i in range(3):
+            #if score is zero, auto rank 3rd, no bonus
             if players[i].game1_score == 0:
                 players[i].game1_rank = 3
                 players[i].participant.vars['game1_rank'] = 3
                 players[i].game1_bonus = 0
                 players[i].participant.vars['game1_bonus'] = 0
+            #if not score of zero, then rank in order of highest score in game 1
             else:
                 players[i].game1_rank = i + 1
                 players[i].participant.vars['game1_rank'] = i + 1
-                players[i].game1_bonus = 2 - i
-                players[i].participant.vars['game1_bonus'] = 2 - i
-                if i == 0:
-                    players[i].participant.payoff += 2.5
-                else:
-                    players[i].participant.payoff += c(2 - i)
+                #need to change bonus structure here
+                if players[i].game1_rank == 1:
+                    players[i].game1_bonus = Constants.first_place_bonus
+                    players[i].participant.vars['game1_bonus'] = Constants.first_place_bonus
+                    players[i].participant.payoff += Constants.first_place_bonus
+                if players[i].game1_rank == 2:
+                    players[i].game1_bonus = Constants.second_place_bonus
+                    players[i].participant.vars['game1_bonus'] = Constants.second_place_bonus
+                    players[i].participant.payoff += Constants.second_place_bonus
+
 
 # game 1 results
 class Results1(Page):
@@ -147,12 +142,14 @@ class Results1(Page):
         return {
             'attempted': self.player.attempted,
             'correct': self.player.game1_score,
+            'earnings': self.player.game1_earnings,
 
             # automoatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
 
-class Survey_group(Page):
+#Ask why player 1 chose Firm
+class WhyFirm(Page):
     form_model = 'player'
     timeout_seconds = 60
     
@@ -163,42 +160,34 @@ class Survey_group(Page):
             return ['q6']
         else:
             return []
+    def vars_for_template(self):
+        return {
+            'firm': self.player.participant.vars['firm']
+        }
 
-# class Survey2(Page):
-#     form_model = 'player'
-#     form_fields = ['time_Survey2', 'q2', 'q3']
+#Comprehension Questions for everyone
+class Comprehension(Page):
+     form_model = 'player'
+     def get_form_fields(self):
+         #Show questions based on role
+        if self.player.id_in_group == 1:
+            return ['q2', 'q3', 'q4']
+        else:
+            return ['q2', 'q3']
 
-# class Survey4(Page):
-#     form_model = 'player'
-
-#     def vars_for_template(self):
-#         if self.player.id_in_group == 1:
-#             return {
-#                 'id': 1,
-#                 'firm': self.player.participant.vars['firm']
-#             }
-#         else:
-#             return {
-#                 'id': 2
-#             }
-
-#     def get_form_fields(self):
-#         if self.player.id_in_group == 1:
-#             return ['time_Survey4', 'q4']
-#         else:
-#             return ['time_Survey5', 'q5']
-
+class CompResults(Page):
+    pass
 
 page_sequence = [
     Game1WaitPage,
 	WhatHappensNextA,
 	WhatHappensNextB,
+    Comprehension,
+    CompResults,
     ChooseFirm,
-    #Survey4,
-    Survey_group,
-    Instructions1WaitPage,
-    Instructions1,
-    #Survey2,
+    WhyFirm,
+    Game1FirmWaitPage,
+    Game1Firm,
     Game1,
     Results1WaitPage,
     Results1

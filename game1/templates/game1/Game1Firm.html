@@ -2,7 +2,7 @@
 {% load otree static %}
 
 {% block title %}
-    Game 1 Instructions
+    Game 1 Firm
 {% endblock %}
 
 {% block scripts %}
@@ -27,15 +27,21 @@
     <!DOCTYPE html>
     <html>
         <body>
-            <input type="hidden" name="time_Instructions1" id="arrive_time"/>
+            <input type="hidden" name="time_Game1Firm" id="arrive_time"/>
             <p>
-                In this task, you will...
+                {% if firm == 'A' %}
+                    You are playing in Firm A. You will see the baseline scores for the 2 randomly chosen players in your group.
+                {% else %}
+                    You are playing in Firm B. You will not see the baseline scores for the 2 randomly chosen players in your group.
+                {% endif %}
                 <br><br>
                 Your firm: {{ firm }}.
                 <br>
-                Your baseline score: {{ baseline }}.
+               
                 <br>
                 {% if firm == 'A' %}
+					Your baseline score: {{ baseline }}.
+					<BR>
                     Opponent 1's baseline score: {{ opponent1 }}.
                     <br>
                     Opponent 2's baseline score: {{ opponent2 }}.

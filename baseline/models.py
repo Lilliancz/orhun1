@@ -70,9 +70,12 @@ class Player(BasePlayer):
     
     # number of correct answers in baseline task
     baseline_score = models.IntegerField()
-    
+
+    baseline_earnings = models.CurrencyField()
+
     # number of problems attempted
     attempted = models.IntegerField()
+
     # arrival times
     time_Instructions = models.StringField()
     time_Baseline = models.StringField()

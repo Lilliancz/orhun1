@@ -2,7 +2,7 @@
 {% load otree static %}
 
 {% block title %}
-    Game 1 Results
+    Thank you
 {% endblock %}
 
 {% block scripts %}
@@ -29,9 +29,15 @@
         <body>
             <input type="hidden" name="time_Results1" id="arrive_time"/>
             <p>
-                You attempted {{ attempted }} {{ problems }} and got {{ correct }} correct.
+
+                Thank you for participating in this competition.
                 <br><br>
-                Your score is {{ correct }}.
+                You attempted {{ attempted }} {{ problems }} and answered {{ correct }} of them correctly.
+                <br><br>
+                Each correct question earned you 5 cents. <BR>
+				Therefore, your bonus payment from Part 1 is {{ earnings }} .
+                Please click next to answer a few questions. After completing that page, you will be told about how your performance compared to the others in your firm.
+
             </p>
         </body>
     </html>

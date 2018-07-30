@@ -19,6 +19,8 @@ class Constants(BaseConstants):
     # Do not change
     players_per_group = 3
     num_rounds = 1
+    first_place_bonus = 2.5
+    second_place_bonus = 1
 
     # these are variable and can be set to anything by the person running the experiment.
     # 0 and 100 are the default values
@@ -71,6 +73,15 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+
+    def getfirm(self):
+        return self.participant.vars['firm']
+
+    def role(self):
+        if self.id_in_group == 1:
+            return 'chooser'
+        else:
+            return 'notchooser'
     
     # number of correct answers in baseline task
     game1_score = models.IntegerField()
@@ -79,7 +90,10 @@ class Player(BasePlayer):
     game1_rank = models.IntegerField()
 
     # player's bonus for game 1
-    game1_bonus = models.IntegerField()
+    game1_bonus = models.CurrencyField()
+
+    # player's earnings for game 1
+    game1_earnings = models.CurrencyField()
 
     # number of problems attempted
     attempted = models.IntegerField()
@@ -108,27 +122,28 @@ class Player(BasePlayer):
     
     # arrival times
     time_ChooseFirm = models.StringField()
-    time_Instructions1 = models.StringField()
+    time_Game1Firm = models.StringField()
     time_Game1 = models.StringField()
     time_Results1 = models.StringField()
+    time_Comprehension = models.StringField()
     # time_Survey2 = models.StringField()
     # time_Survey45 = models.StringField()
 
 
-    # q2 = models.StringField(
-    #     widget=widgets.RadioSelect,
-    #     choices=['2 others', '3 others', '4 others'],
-    #     label='How many other players will you be evaluated against?')
+    q2 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['2 others', '3 others', '4 others'],
+        label='How many other players will you be evaluated against?')
 
-    # q3 = models.StringField(
-    #     widget=widgets.RadioSelect,
-    #     choices=['True', 'False'],
-    #     label='In Firm B, all players\' know each others\' scores before they compete.')
-    
-    # q4 = models.StringField(
-    #     widget=widgets.RadioSelect,
-    #     choices=['Yes', 'No', 'I\'m not sure'],
-    #     label='How many other players will you be evaluated against?')
+    q3 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['True', 'False'],
+        label='In Firm B, all players know each others\' scores before they compete.')
+
+    q4 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['Yes', 'No', 'I\'m not sure'],
+        label = 'Will your opponents also make a choice between Firm A and Firm B?')
 
     # q5 = models.StringField(
     #     widget=widgets.RadioSelect,

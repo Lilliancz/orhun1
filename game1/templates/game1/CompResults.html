@@ -1,0 +1,47 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block scripts %}
+    <style>
+    .correct {color: green}
+    .incorrect {color: red}
+    </style>
+{% endblock %}
+
+{% block title %}
+    Comprehension Results
+{% endblock %}
+
+{% block content %}
+    
+    <P><b>Question 1:</B> How many other players will you be evaluated against?</P>
+    <P><b>Your Answer:</b> {{ player.q2 }}
+    {% if player.q2 == "2 others" %}
+        <div class="correct">Correct!</div>
+    {% else %}
+        <div class="incorrect">Incorrect.</div>
+    {% endif %}
+        <b>Correct Answer: 2 others. </b>  You will be evaluated against 2 other players.</P>
+<HR>
+    <P><b>Question 2:</b> True or False: In Firm B, all players know each others' scores before they compete.<BR></P>
+     <P><b>Your Answer:</b> {{ player.q3 }}
+        {% if player.q3 == "True" %}
+         <div class="correct">Correct!</div>
+    {% else %}
+        <div class="incorrect">Incorrect.</div>
+    {% endif %}
+        <b>Correct Answer: True. </b>In Firm B, all players know each others' scores before they compete.</P>
+
+    {% if player.role == "chooser" %}<HR>
+        <P><b>Question 3:</b> Will your opponents also make a choice between Firm A and Firm B?</P>
+         <P><b>Your Answer:</b> {{ player.q4 }}
+        {% if player.q4 == "No" %}
+        <div class="correct">Correct!</div>
+    {% else %}
+        <div class="incorrect">Incorrect.</div>
+    {% endif %}
+            <b>Correct Answer: No. </b>Your opponents will NOT have a choice. They will be randomly assigned to be your opponents in the firm you choose. </P>
+    {% endif %}
+    {% next_button %}
+
+{% endblock %}

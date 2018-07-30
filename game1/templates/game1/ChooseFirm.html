@@ -2,7 +2,7 @@
 {% load otree static %}
 
 {% block title %}
-    Choose Firm
+    Now, please choose a firm to compete in
 {% endblock %}
 
 {% block scripts %}
@@ -176,22 +176,15 @@
             <input type="hidden" name="time_ChooseFirm" id="arrive_time"/>
             <input type="hidden" name="switch" id="switch_form"/>
             <p>
-                Before you compete agains two other people, we give you a choice. 
+                Make a choice by clicking the information environment (Firm A or B) you want to compete in. Please remember that
                 <br><br>
-                You may choose to compete in an environment where the past performance of each of the three players is shown to all players before they start the competition. We refer to this environment as Firm A.
-                <br><br>
-                Alternatively, you may choose to compete in an environment where the past performance players is not known by any of the players. We refer to this environment as Firm B.
-                <br><br>
-                Your opponents will be randomly assigned to the firm you choose. In other words, they will not make a choice between Firm A and Firm B.
-                <br><br>
-                Summary: If you choose Firm A, you and your opponents will be able to see each others’ scores from Part 1. If you choose firm B,  you will not know the Part 1 scores of your opponents matched with you to compete in this part.  Likewise, your opponents will only know their own scores and no one else’s.
-                <br><br>
-                Please think carefully about each environment, and how it might affect your performance. Make a choice by clicking the information environment (Firm A or B) you want to compete in.
-                <br><br>
+                In Firm A: Competition begins after all participants observe each others’ scores from Part 1.<BR>
+In Firm B: Participants do not observe each others’ scores from Part 1.
+  <br><br>
             </p>
 
             <p id="choose">
-                Choose your firm. <br>
+                Please choose the firm you would like to join. <br>
                 <input id="A" type="radio" name="firm" value="A"/> A <br>
                 <input id="B" type="radio" name="firm" value="B"/> B <br>
             </p>
