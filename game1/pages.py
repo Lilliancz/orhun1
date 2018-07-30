@@ -178,6 +178,66 @@ class Comprehension(Page):
 class CompResults(Page):
     pass
 
+class FinalSurvey(Page):
+    form_model = 'player'
+    form_fields =['time_FinalSurvey', 'q8', 'q10','q11','q12']
+    timeout_seconds = 160
+
+class FinalSurveyA(Page):
+    form_model = 'player'
+    form_fields =['q7choice', 'q7']
+    timeout_seconds = 160
+    def is_displayed(self):
+        return self.player.id_in_group == 1
+    def vars_for_template(self):
+        firm = self.player.participant.vars['firm']
+        return {
+            'changefirm_label': 'You chose Firm '+firm+' in the first contest. \
+        If given the choice again would you still choose Firm '+firm+' or would you change your choice?'
+        }
+
+class PerformancePayment(Page):
+    form_model = 'player'
+    form_fields = ['time_PerformancePayment']
+    timeout_seconds = 60
+    def vars_for_template(self):
+        bl_attempted = self.player.participant.vars['baseline_attempted']
+        bl_score = self.player.participant.vars['baseline_score']
+        bl_earnings = self.player.participant.vars['baseline_earnings']
+        bl_problems = inflect.engine().plural('problem', bl_attempted)
+
+        g1_attempted = self.player.participant.vars['game1_attempted']
+        g1_score = self.player.participant.vars['game1_score']
+        g1_earnings = self.player.participant.vars['game1_earnings']
+        g1_problems = inflect.engine().plural('problem', g1_attempted)
+        g1_rank = self.player.participant.vars['game1_rank']
+        g1_bonus = self.player.participant.vars['game1_bonus']
+
+
+        # should there be a uniform participation fee on top of this?
+        # doing it this way bc mturk pays participants the participation_fee defined in settings
+        # settings.SESSION_CONFIGS[0]['participation_fee'] = g1_bonus + g2_bonus
+
+        return {
+            'bl_attempted': bl_attempted,
+            'bl_score': bl_score,
+            'bl_earnings': bl_earnings,
+            'bl_problems': bl_problems,
+            'g1_attempted': g1_attempted,
+            'g1_score': g1_score,
+            'g1_earnings': g1_earnings,
+            'g1_problems': g1_problems,
+            'g1_rank': g1_rank,
+            'g1_bonus': g1_bonus,
+            'total_bonus': self.participant.payoff
+        }
+
+
+class Debrief(Page):
+    form_model = 'player'
+    form_fields = ['debriefComments,time_Debrief']
+    timeout_seconds = 60
+
 page_sequence = [
     Game1WaitPage,
 	WhatHappensNextA,
@@ -190,5 +250,10 @@ page_sequence = [
     Game1Firm,
     Game1,
     Results1WaitPage,
-    Results1
+    Results1,
+    FinalSurvey,
+    FinalSurveyA,
+    #PerformancePayment,
+    #Debrief
+
 ]

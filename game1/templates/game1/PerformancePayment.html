@@ -27,21 +27,16 @@
     <!DOCTYPE html>
     <html>
         <body>
-            <input type="hidden" name="time_Results1" id="arrive_time"/>
+            <input type="hidden" name="time_PerformancePayment" id="arrive_time"/>
             <p>
 
-                Thank you for participating in this competition.
-                <br><br>
-                You attempted {{ attempted }} {{ problems }} and answered {{ correct }} of them correctly.
-                <br><br>
-                Each correct question earned you 5 cents. <BR>
-				Therefore, your bonus payment from Part 1 is {{ earnings }} .
-                Please click next to answer a few questions. After completing that page, you will be told about how your performance compared to the others in your firm.
-
-
-                In part 1,  you attempted x, and got y questions correct. Each correct question earned you 5 cents. As a result, your bonus from part 1 is xx.
-In the competition, you attempted x, and got y questions correct. You ranked x out of 3 players. As a result, your bonus from the competition is xx.
-In total, with your participation payment, you will be paid zz.
+                <!--In part 1,  you attempted {{ b1_attempted }} {{ b1_problems }} and got {{ b1_score }} questions correct. <BR><BR>
+                Each correct question earned you 5 cents. As a result, your incremental earnings from part 1 is {{ b1_earnings }}.<BR><BR><BR>
+-->
+                In the competition, you attempted  {{ g1_attempted }} {{ g1_problems }} and got {{ g1_score }} questions correct. <BR><BR>
+                Each correct question earned you 5 cents. As a result, your incremental earnings from part 1 is {{ g1_earnings }}.<BR><BR>
+                You ranked {{ g1_rank }} out of 3 players. As a result, your bonus from the competition is {{ g1_bonus }}.<BR><BR>
+                In total, with your participation payment, you will be paid {{ total_bonus }}.
 
 
             </p>

@@ -74,7 +74,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    def getfirm(self):
+    def getFirm(self):
         return self.participant.vars['firm']
 
     def role(self):
@@ -126,6 +126,9 @@ class Player(BasePlayer):
     time_Game1 = models.StringField()
     time_Results1 = models.StringField()
     time_Comprehension = models.StringField()
+    time_Debrief = models.StringField()
+    time_FinalSurvey = models.StringField()
+    time_PerformancePayment = models.StringField()
     # time_Survey2 = models.StringField()
     # time_Survey45 = models.StringField()
 
@@ -155,3 +158,21 @@ class Player(BasePlayer):
     q6 = models.StringField(label='Why did you choose this firm?')
 
 
+
+    q7_choice = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['Yes', 'No'])
+    q7 = models.LongStringField(label='Why?')
+    q8 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['Won', 'Came Second', 'Lost'],
+        label='Do you think you won, came second, or lost the contest?')
+
+    q10 = models.PositiveIntegerField(label='Age')
+    q11 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['Man', 'Woman', 'Non-binary', 'Other'],
+        label='Gender')
+    q12 = models.LongStringField(label='Was there any part of the study that was confusing? Please help us improve our study by providing feedback.')
+
+    debriefComments = models.LongStringField(label='Comments')
