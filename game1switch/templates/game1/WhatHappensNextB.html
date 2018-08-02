@@ -1,0 +1,44 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    What Happens Next
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block styles %}
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <!DOCTYPE html>
+    <html>
+        <body>
+            <p>
+				In the next page, you will be assigned to either Firm A or Firm B, where you will compete against two other players. 
+				<BR><BR>
+				In Firm A: Competition begins after all participants observe each others’ scores from Part 1.<BR><BR>
+				In Firm B: Participants do not observe each others’ scores from Part 1.
+            </p>
+                 
+        </body>
+    </html>
+
+    <div id="next">
+        <button class="btn btn-primary btn-large next-button" style="float: right;">Next</button>
+    </div>
+
+    </script>
+
+{% endblock %}
+
+{% comment %}
+ 
+{% endcomment %}

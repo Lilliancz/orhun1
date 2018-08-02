@@ -6,7 +6,7 @@ import inflect
 import random
 from django.conf import settings
 
-author = 'Eli Pandolfo, modified by Xiaotian Lu and Lillian Chen'
+author = 'Eli Pandolfo'
 
 ''' notes
 
@@ -65,11 +65,8 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         self.group_randomly()
 
-# this controls if the offer to switch will be made.
-# if choice = 1 then
         for p in self.get_players():
-            #p.participant.vars['choice'] = (1 if random.random() >= 0.5 else 2)
-            p.participant.vars['choice'] = 1
+            p.participant.vars['choice'] = (1 if random.random() >= 0.5 else 2)
 
 
 class Group(BaseGroup):
@@ -95,9 +92,6 @@ class Player(BasePlayer):
 
     # player's bonus for game 1
     game1_bonus = models.CurrencyField()
-
-    # combined bonus for game 1 and baseline
-    total_bonus = models.CurrencyField()
 
     # number of problems attempted
     attempted = models.IntegerField()

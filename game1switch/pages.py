@@ -181,7 +181,6 @@ class Results1(Page):
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         self.player.participant.vars['total_bonus'] = self.player.participant.vars['baseline_bonus'] + self.player.participant.vars['game1_bonus']
-        self.player.total_bonus = self.player.participant.vars['total_bonus']
         return {
             'attempted': self.player.attempted,
             'correct': self.player.game1_score,
