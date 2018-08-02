@@ -31,10 +31,10 @@
             <p>
                 Thank you for your effort! Two minutes has elapsed.
                 <br><br>
-                You attempted {{ attempted }} {{ problems }} and answered {{ correct }} of them correctly.
+                You attempted {{ player.attempted }} {{ problems }} and answered {{ player.baseline_score }} of them correctly.
                 <br><br>
                 Each correct question earned you 5 cents. <BR>
-				Therefore, your bonus payment from Part 1 is {{ earnings }} .
+				Therefore, your bonus payment from Part 1 is {{ player.baseline_bonus }}.
             </p>
         </body>
     </html>

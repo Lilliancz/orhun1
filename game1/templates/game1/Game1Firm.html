@@ -30,14 +30,11 @@
             <input type="hidden" name="time_Game1Firm" id="arrive_time"/>
             <p>
                 {% if firm == 'A' %}
-                    You are playing in Firm A. You will see the baseline scores for the 2 randomly chosen players in your group.
+                    You are playing in <B>Firm A</B>. You will see the baseline scores for the 2 randomly chosen players in your group.
                 {% else %}
-                    You are playing in Firm B. You will not see the baseline scores for the 2 randomly chosen players in your group.
+                    You are playing in <B>Firm B</B>. You will not see the baseline scores for the 2 randomly chosen players in your group.
                 {% endif %}
-                <br><br>
-                Your firm: {{ firm }}.
                 <br>
-               
                 <br>
                 {% if firm == 'A' %}
 					Your baseline score: {{ baseline }}.
@@ -46,7 +43,7 @@
                     <br>
                     Opponent 2's baseline score: {{ opponent2 }}.
                 {% endif %}
-                <br><br>
+                <br><br>On the next screen, you will start the competition. Please click next when you are ready.
                 Good luck!
             </p>
         </body>

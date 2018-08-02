@@ -6,6 +6,11 @@
     .correct {color: green}
     .incorrect {color: red}
     </style>
+            <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -25,12 +30,12 @@
 <HR>
     <P><b>Question 2:</b> True or False: In Firm B, all players know each others' scores before they compete.<BR></P>
      <P><b>Your Answer:</b> {{ player.q3 }}
-        {% if player.q3 == "True" %}
+        {% if player.q3 == "False" %}
          <div class="correct">Correct!</div>
     {% else %}
         <div class="incorrect">Incorrect.</div>
     {% endif %}
-        <b>Correct Answer: True. </b>In Firm B, all players know each others' scores before they compete.</P>
+        <b>Correct Answer: False. </b>In Firm B, participants do not observe each others’ scores from Part 1.</P>
 
     {% if player.role == "chooser" %}<HR>
         <P><b>Question 3:</b> Will your opponents also make a choice between Firm A and Firm B?</P>

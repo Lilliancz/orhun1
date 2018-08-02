@@ -14,22 +14,40 @@ class Game1WaitPage(WaitPage):
 
 class WhatHappensNextA(Page):
     form_model = 'player'
-    timeout_seconds = 120
+    timeout_seconds = Constants.pageTimeout
 	
     def is_displayed(self):
         return self.player.id_in_group == 1
 
 class WhatHappensNextB(Page):
     form_model = 'player'
-    timeout_seconds = 120
+    timeout_seconds = Constants.pageTimeout
+
     def is_displayed(self):
         return self.player.role() == 'notchooser'
+
+
+#Comprehension Questions for everyone
+class Comprehension(Page):
+     form_model = 'player'
+     timeout_seconds = Constants.pageTimeout
+
+     def get_form_fields(self):
+         #Show questions based on role
+        if self.player.id_in_group == 1:
+            return ['q2', 'q3', 'q4']
+        else:
+            return ['q2', 'q3']
+
+class CompResults(Page):
+    timeout_seconds = Constants.pageTimeout
+
 
 # one player in each group chooses firm A or firm B
 class ChooseFirm(Page):
     form_model = 'player'
 
-    timeout_seconds = 120
+    timeout_seconds = Constants.pageTimeout
     timeout_submission = {'firm': 'B'}
 
     def is_displayed(self):
@@ -52,15 +70,39 @@ class ChooseFirm(Page):
             p.participant.vars['firm'] = self.player.firm
             p.firm = self.player.firm
 
+
+# Ask why player 1 chose Firm
+class WhyFirm(Page):
+    form_model = 'player'
+    timeout_seconds = Constants.pageTimeout
+
+    def is_displayed(self):
+        return self.player.id_in_group == 1
+
+    def get_form_fields(self):
+        if self.player.id_in_group == 1:
+            return ['q6']
+        else:
+            return []
+
+    def vars_for_template(self):
+        return {
+            'firm': self.player.participant.vars['firm']
+        }
+
 # wait page for all 3 group members
 class Game1FirmWaitPage(WaitPage):
-    body_text = "Please wait while other participants are finishing up. You will begin the competition when all three participants have arrived to this page. Please do not leave, the wait should not be long. If you are inactive for a while, you will be kicked out of the study and not get any bonus."
+    body_text = "Please wait while other participants are finishing up. You will begin the competition \
+    when all three participants have arrived to this page. Please do not leave, the wait should not be long. \
+    If you are inactive for a while (not on a wait page), you will be kicked out of the study and not get any bonus."
+
+
 
 # Show firm for game 1
 class Game1Firm(Page):
     form_model = 'player'
     form_fields = ['time_Game1Firm']
-    timeout_seconds = 60
+    timeout_seconds = Constants.pageTimeout
     
     def vars_for_template(self):
         you = self.player.id_in_group
@@ -93,9 +135,6 @@ class Game1(Page):
     def before_next_page(self):
         self.player.participant.vars['game1_attempted'] = self.player.attempted
         self.player.participant.vars['game1_score'] = self.player.game1_score
-        self.player.game1_earnings = .05 * self.player.game1_score
-        self.player.participant.vars['game1_earnings'] = self.player.game1_earnings
-        self.participant.payoff = self.player.game1_earnings
 
 class Results1WaitPage(WaitPage):
     
@@ -129,64 +168,41 @@ class Results1WaitPage(WaitPage):
                     players[i].game1_bonus = Constants.second_place_bonus
                     players[i].participant.vars['game1_bonus'] = Constants.second_place_bonus
                     players[i].participant.payoff += Constants.second_place_bonus
-
+                if players[i].game1_rank == 3:
+                    players[i].game1_bonus = 0
+                    players[i].participant.vars['game1_bonus'] = 0
 
 # game 1 results
 class Results1(Page):
     form_model = 'player'
     form_fields = ['time_Results1']
-    timeout_seconds = 60
+    timeout_seconds = Constants.pageTimeout
     
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
+        self.player.participant.vars['total_bonus'] = self.player.participant.vars['baseline_bonus'] + self.player.participant.vars['game1_bonus']
         return {
             'attempted': self.player.attempted,
             'correct': self.player.game1_score,
-            'earnings': self.player.game1_earnings,
+            'baseline_attempted': self.player.participant.vars['baseline_attempted'],
+            'baseline_score': self.player.participant.vars['baseline_score'],
+            'baseline_bonus': self.player.participant.vars['baseline_bonus'],
+            'total_bonus': self.player.participant.vars['total_bonus'],
 
             # automoatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
 
-#Ask why player 1 chose Firm
-class WhyFirm(Page):
-    form_model = 'player'
-    timeout_seconds = 60
-    
-    def is_displayed(self):
-        return self.player.id_in_group == 1
-    def get_form_fields(self):
-        if self.player.id_in_group == 1:
-            return ['q6']
-        else:
-            return []
-    def vars_for_template(self):
-        return {
-            'firm': self.player.participant.vars['firm']
-        }
-
-#Comprehension Questions for everyone
-class Comprehension(Page):
-     form_model = 'player'
-     def get_form_fields(self):
-         #Show questions based on role
-        if self.player.id_in_group == 1:
-            return ['q2', 'q3', 'q4']
-        else:
-            return ['q2', 'q3']
-
-class CompResults(Page):
-    pass
 
 class FinalSurvey(Page):
     form_model = 'player'
     form_fields =['time_FinalSurvey', 'q8', 'q10','q11','q12']
-    timeout_seconds = 160
+    timeout_seconds = Constants.pageTimeout
 
 class FinalSurveyA(Page):
     form_model = 'player'
-    form_fields =['q7choice', 'q7']
-    timeout_seconds = 160
+    form_fields =['q7_choice', 'q7']
+    timeout_seconds = Constants.pageTimeout
     def is_displayed(self):
         return self.player.id_in_group == 1
     def vars_for_template(self):
@@ -199,44 +215,24 @@ class FinalSurveyA(Page):
 class PerformancePayment(Page):
     form_model = 'player'
     form_fields = ['time_PerformancePayment']
-    timeout_seconds = 60
+    timeout_seconds = Constants.pageTimeout
     def vars_for_template(self):
-        bl_attempted = self.player.participant.vars['baseline_attempted']
-        bl_score = self.player.participant.vars['baseline_score']
-        bl_earnings = self.player.participant.vars['baseline_earnings']
-        bl_problems = inflect.engine().plural('problem', bl_attempted)
-
-        g1_attempted = self.player.participant.vars['game1_attempted']
-        g1_score = self.player.participant.vars['game1_score']
-        g1_earnings = self.player.participant.vars['game1_earnings']
-        g1_problems = inflect.engine().plural('problem', g1_attempted)
-        g1_rank = self.player.participant.vars['game1_rank']
-        g1_bonus = self.player.participant.vars['game1_bonus']
-
-
-        # should there be a uniform participation fee on top of this?
-        # doing it this way bc mturk pays participants the participation_fee defined in settings
-        # settings.SESSION_CONFIGS[0]['participation_fee'] = g1_bonus + g2_bonus
-
         return {
-            'bl_attempted': bl_attempted,
-            'bl_score': bl_score,
-            'bl_earnings': bl_earnings,
-            'bl_problems': bl_problems,
-            'g1_attempted': g1_attempted,
-            'g1_score': g1_score,
-            'g1_earnings': g1_earnings,
-            'g1_problems': g1_problems,
-            'g1_rank': g1_rank,
-            'g1_bonus': g1_bonus,
-            'total_bonus': self.participant.payoff
+            'attempted': self.player.attempted,
+            'correct': self.player.game1_score,
+            'baseline_bonus': c(self.player.participant.vars['baseline_bonus']),
+            'total_bonus': c(self.player.participant.vars['total_bonus']),
+
+            # automoatically pluralizes the word 'problem' if necessary
+            'problems': inflect.engine().plural('problem', self.player.attempted)
         }
+
 
 
 class Debrief(Page):
     form_model = 'player'
-    form_fields = ['debriefComments,time_Debrief']
-    timeout_seconds = 60
+    form_fields = ['debriefComments','time_Debrief']
+    timeout_seconds = Constants.pageTimeout
 
 page_sequence = [
     Game1WaitPage,
@@ -253,7 +249,7 @@ page_sequence = [
     Results1,
     FinalSurvey,
     FinalSurveyA,
-    #PerformancePayment,
-    #Debrief
+    PerformancePayment,
+    Debrief
 
 ]

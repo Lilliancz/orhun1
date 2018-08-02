@@ -7,13 +7,13 @@ from django.conf import settings
 # overall instructions & baseline instructions
 
 class General(Page):
-    timeout_seconds = 60
+    timeout_seconds = Constants.pageTimeout
 
 
 class Instructions(Page):
     form_model = 'player'
     form_fields = ['time_Instructions']
-    timeout_seconds = 60
+    timeout_seconds = Constants.pageTimeout
 
 # baseline task
 class Baseline(Page):
@@ -34,23 +34,21 @@ class Baseline(Page):
     def before_next_page(self):
         self.player.participant.vars['baseline_attempted'] = self.player.attempted
         self.player.participant.vars['baseline_score'] = self.player.baseline_score
-        self.player.baseline_earnings = 0.05 * self.player.baseline_score
-        self.participant.payoff = self.player.baseline_earnings
-        self.player.participant.vars['baseline_earnings'] = self.player.baseline_earnings
+        self.player.baseline_bonus = 0.05 * self.player.baseline_score
+        self.participant.payoff = self.player.baseline_bonus
+        print(self.participant.payoff)
+        self.player.participant.vars['baseline_bonus'] = self.player.baseline_bonus
 
 # baseline results
 class ResultsBL(Page):
     form_model = 'player'
     form_fields = ['time_ResultsBL']
-    timeout_seconds = 60
+    timeout_seconds = Constants.pageTimeout
     
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
-            'attempted': self.player.attempted,
-            'correct': self.player.baseline_score,
-            'earnings': self.player.baseline_earnings,
-
+            'baseline_bonus': self.participant.payoff,
             # automoatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
@@ -58,9 +56,10 @@ class ResultsBL(Page):
 class Survey1(Page):
     form_model = 'player'
     form_fields = ['time_Survey1', 'q1']
+    timeout_seconds = Constants.pageTimeout
 
 class IntroPart2(Page):
-    timeout_seconds = 1200
+    timeout_seconds = Constants.pageTimeout
 
 # sequence in which pages are displayed
 page_sequence = [

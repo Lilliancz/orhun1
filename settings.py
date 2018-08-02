@@ -33,7 +33,7 @@ SESSION_CONFIGS = [
        'lower_bound': 0,
        'upper_bound': 25,
        'min_players': 6,
-       'time_limit': 5,
+       'time_limit': 30,
        #'use_browser_bots': True,
     },
     {
@@ -70,7 +70,7 @@ SESSION_CONFIGS = [
        'lower_bound': 0,
        'upper_bound': 25,
        'min_players': 3,
-       'time_limit': 5
+       'time_limit': 50
     },
 ]
 

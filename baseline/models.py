@@ -16,10 +16,12 @@ class Constants(BaseConstants):
 
     # can be changed to anything
     name_in_url = 'BaselineTask'
+    pageTimeout = 120
 
     # Do not change
     players_per_group = None
     num_rounds = 1
+
 
     # these are variable and can be set to anything by the person running the experiment.
     # 0 and 100 are the default values
@@ -71,7 +73,7 @@ class Player(BasePlayer):
     # number of correct answers in baseline task
     baseline_score = models.IntegerField()
 
-    baseline_earnings = models.CurrencyField()
+    baseline_bonus = models.CurrencyField()
 
     # number of problems attempted
     attempted = models.IntegerField()

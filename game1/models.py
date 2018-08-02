@@ -15,12 +15,13 @@ class Constants(BaseConstants):
 
     # can be changed to anything
     name_in_url = 'Game1'
+    pageTimeout = 120
+    first_place_bonus = 2.5
+    second_place_bonus = 1
 
     # Do not change
     players_per_group = 3
     num_rounds = 1
-    first_place_bonus = 2.5
-    second_place_bonus = 1
 
     # these are variable and can be set to anything by the person running the experiment.
     # 0 and 100 are the default values
@@ -92,9 +93,6 @@ class Player(BasePlayer):
     # player's bonus for game 1
     game1_bonus = models.CurrencyField()
 
-    # player's earnings for game 1
-    game1_earnings = models.CurrencyField()
-
     # number of problems attempted
     attempted = models.IntegerField()
 
@@ -161,7 +159,7 @@ class Player(BasePlayer):
 
     q7_choice = models.StringField(
         widget=widgets.RadioSelect,
-        choices=['Yes', 'No'])
+        choices=['Keep Firm', 'Change Firm'])
     q7 = models.LongStringField(label='Why?')
     q8 = models.StringField(
         widget=widgets.RadioSelect,
