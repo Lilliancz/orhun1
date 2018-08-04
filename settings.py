@@ -111,6 +111,7 @@ DEMO_PAGE_INTRO_HTML = """ """
 
 # don't share this with anybody.
 SECRET_KEY = ''
+SENTRY_DSN = 'http://a62c7fe5b78b4dcfb30c3a170e54a5b9:0d9062375f2e406a9c9ee4c3825c3010@sentry.otree.org/322'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
