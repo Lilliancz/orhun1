@@ -235,6 +235,11 @@ class Debrief(Page):
     form_fields = ['debriefComments','time_Debrief']
     timeout_seconds = Constants.pageTimeout
 
+
+class copyMturkCode(Page):
+    pass
+
+
 page_sequence = [
     Game1WaitPage,
 	WhatHappensNextA,
@@ -251,6 +256,7 @@ page_sequence = [
     FinalSurvey,
     FinalSurveyA,
     PerformancePayment,
-    Debrief
+    Debrief,
+    copyMturkCode
 
 ]
