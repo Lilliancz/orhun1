@@ -26,43 +26,6 @@ SESSION_CONFIG_DEFAULTS = {
 
 SESSION_CONFIGS = [
     {
-       'name': 'orhun1',
-       'display_name': 'orhun1',
-       'num_demo_participants': 6,
-       'app_sequence': ['baseline', 'waitpage', 'game1', 'game2'],
-       'lower_bound': 0,
-       'upper_bound': 25,
-       'min_players': 6,
-       'time_limit': 30,
-       #'use_browser_bots': True,
-    },
-    {
-       'name': 'baseline',
-       'display_name': 'baseline',
-       'num_demo_participants': 1,
-       'app_sequence': ['baseline'],
-       'lower_bound': 0,
-       'upper_bound': 10
-    },
-    {
-       'name': 'game1',
-       'display_name': 'game 1',
-       'num_demo_participants': 3,
-       'app_sequence': ['game1'],
-       'lower_bound': 0,
-       'upper_bound': 10
-    },
-
-    {
-       'name': 'game2',
-       'display_name': 'game 2',
-       'num_demo_participants': 3,
-       'app_sequence': ['game2'],
-       'lower_bound': 0,
-       'upper_bound': 10
-    },
-
-    {
        'name': 'pilot',
        'display_name': 'pilot',
        'num_demo_participants': 3,
@@ -70,8 +33,8 @@ SESSION_CONFIGS = [
        'lower_bound': 0,
        'upper_bound': 25,
        'min_players': 3,
-       'time_limit': 50
-    },
+       'time_limit': 90
+    }
 ]
 
 # ISO-639 code

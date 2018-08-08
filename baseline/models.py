@@ -16,7 +16,8 @@ class Constants(BaseConstants):
 
     # can be changed to anything
     name_in_url = 'BaselineTask'
-    pageTimeout = 120
+    pageTimeout = 60
+    gameDuration = "90 seconds"
 
     # Do not change
     players_per_group = None

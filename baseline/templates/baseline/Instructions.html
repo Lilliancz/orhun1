@@ -29,18 +29,24 @@
         <body>
             <input type="hidden" name="time_Instructions" id="arrive_time"/>
             <p>
-                In part 1, you will work on a task that consists of a sequence of arithmetic questions.  You will try to answer as many arithmetic problems as possible in two minutes.  Each arithmetic problem requires you to add three numbers. 
+                In part 1, you will work on a task that consists of a sequence of arithmetic questions.
+                You will try to answer as many arithmetic problems as possible in {{ Constants.gameDuration }}.
+                Each arithmetic problem requires you to add three numbers.
                 <br><br>
 				Example Question: Three plus four plus seven 
 				<BR>Correct answer: 14
 				<br><br>
-				Even though the question expressed numbers in a written form, you must enter your answers in numeric form, for example `14’ rather than ‘fourteen’. You will not be able to click next before you answer each question. If you want to proceed to the next question without necessarily getting the answer right, you can type `1’ and click next.
+				Even though the question expressed numbers in a written form, you must enter your answers in numeric form,
+                for example `14’ rather than ‘fourteen’. You will not be able to click next before you answer each question.
+                If you want to proceed to the next question without necessarily getting the answer right, you can type `1’ and click next.
 				<br><br>
-				You will be paid based on the number of questions you answer correctly in a period of 2 minutes. You will earn 5 cents additional bonus for each correct answer. 
+				You will be paid based on the number of questions you answer correctly in a period of {{ Constants.gameDuration }}.
+                You will earn 5 cents additional bonus for each correct answer.
 				<br><br>
-				At the end of the two minutes, the program will display the number of questions you attempted and the number of questions you got right.
+				At the end of the {{ Constants.gameDuration }}, the program will display the number of questions you attempted
+                and the number of questions you got right.
 				<br><br>
-				You may submit your answer using the submit button, not the enter key.
+				Please submit your answer using the submit button. The enter key will not work.
 				<br><br>
 				Good luck!
             </p>

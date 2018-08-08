@@ -32,6 +32,12 @@ class Comprehension(Page):
      form_model = 'player'
      timeout_seconds = Constants.pageTimeout
 
+     def vars_for_template(self):
+         self.player.get_1wait_times()
+         print("got 1 wait times")
+         return {
+             'junk': 1}
+
      def get_form_fields(self):
          #Show questions based on role
         if self.player.id_in_group == 1:
@@ -199,6 +205,12 @@ class FinalSurvey(Page):
     form_model = 'player'
     form_fields =['time_FinalSurvey', 'q8', 'q10','q11','q12']
     timeout_seconds = Constants.pageTimeout
+    def vars_for_template(self):
+        self.player.get_wait_times()
+        print("got wait times")
+        return {
+            'junk': 1}
+
 
 class FinalSurveyA(Page):
     form_model = 'player'
@@ -209,8 +221,8 @@ class FinalSurveyA(Page):
     def vars_for_template(self):
         firm = self.player.participant.vars['firm']
         return {
-            'changefirm_label': 'You chose Firm '+firm+' in the first contest. \
-        If given the choice again would you still choose Firm '+firm+' or would you change your choice?'
+            'changefirm_label': 'You chose Firm '+firm+' in the contest. \
+        If given the choice again, would you still choose Firm '+firm+' or would you change your choice?'
         }
 
 class PerformancePayment(Page):
@@ -228,16 +240,15 @@ class PerformancePayment(Page):
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
 
-
-
 class Debrief(Page):
     form_model = 'player'
     form_fields = ['debriefComments','time_Debrief']
     timeout_seconds = Constants.pageTimeout
 
-
 class copyMturkCode(Page):
     pass
+
+
 
 
 page_sequence = [

@@ -7,13 +7,13 @@ from django.conf import settings
 # overall instructions & baseline instructions
 
 class General(Page):
-    timeout_seconds = Constants.pageTimeout
-
+    #timeout_seconds = Constants.pageTimeout
+    pass
 
 class Instructions(Page):
     form_model = 'player'
     form_fields = ['time_Instructions']
-    timeout_seconds = Constants.pageTimeout
+    #timeout_seconds = Constants.pageTimeout
 
 # baseline task
 class Baseline(Page):
@@ -43,7 +43,7 @@ class Baseline(Page):
 class ResultsBL(Page):
     form_model = 'player'
     form_fields = ['time_ResultsBL']
-    timeout_seconds = Constants.pageTimeout
+    #timeout_seconds = Constants.pageTimeout
     
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
@@ -56,10 +56,11 @@ class ResultsBL(Page):
 class Survey1(Page):
     form_model = 'player'
     form_fields = ['time_Survey1', 'q1']
-    timeout_seconds = Constants.pageTimeout
+   #timeout_seconds = Constants.pageTimeout
 
 class IntroPart2(Page):
-    timeout_seconds = Constants.pageTimeout
+    #timeout_seconds = Constants.pageTimeout
+    pass
 
 # sequence in which pages are displayed
 page_sequence = [

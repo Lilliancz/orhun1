@@ -5,6 +5,7 @@ from otree.api import (
 import inflect
 import random
 from django.conf import settings
+from otree.models_concrete import PageCompletion
 
 author = 'Eli Pandolfo, modified by Xiaotian Lu and Lillian Chen'
 
@@ -15,9 +16,11 @@ class Constants(BaseConstants):
 
     # can be changed to anything
     name_in_url = 'Game1'
-    pageTimeout = 120
+    pageTimeout = 60
     first_place_bonus = 2.5
     second_place_bonus = 1
+    gameDuration = "90 seconds"
+    pageTimeoutWording = "1 minute"
 
     # Do not change
     players_per_group = 3
@@ -180,3 +183,20 @@ class Player(BasePlayer):
     q12 = models.LongStringField(label='Was there any part of the study that was confusing? Please help us improve our study by providing feedback.')
 
     debriefComments = models.LongStringField(label='Comments')
+    Game1WaitPageSec = models.IntegerField()
+    Game1FirmWaitPageSec = models.IntegerField()
+    Results1WaitPageSec = models.IntegerField()
+
+    #Philipp Chapkovski code for wait page timing
+    def get_wait_times(self):
+        self.Game1WaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
+            page_name__in='Game1WaitPage').values_list('seconds_on_page',flat=True))
+        self.Game1FirmWaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
+            page_name__in='Game1FirmWaitPage').values_list('seconds_on_page',flat=True))
+        self.Results1WaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
+            page_name__in='Results1WaitPage').values_list('seconds_on_page',flat=True))
+
+
+    def get_1wait_times(self):
+        self.Game1WaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
+            page_name__in='Game1WaitPage').values_list('seconds_on_page',flat=True))
