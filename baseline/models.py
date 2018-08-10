@@ -31,7 +31,7 @@ class Constants(BaseConstants):
     upper_bound = settings.SESSION_CONFIGS[0]['upper_bound']
 
     problems = []
-    
+    answers=[]
     # create list of problems.
     # this is done serverside instead of clientside because everyone has the same problems, and
     # because converting numbers to words is easier in python than in JS.
@@ -60,6 +60,7 @@ class Constants(BaseConstants):
         entry = (words, answer)
 
         problems.append(entry)
+        answers.append(answer)
 
 
 class Subsession(BaseSubsession):
@@ -75,7 +76,7 @@ class Player(BasePlayer):
     # number of correct answers in baseline task
     baseline_score = models.IntegerField()
     baseline_bonus = models.CurrencyField()
-    baseline_problems = models.StringField()
+    baseline_answers = models.StringField()
 
     # number of problems attempted
     attempted = models.IntegerField()

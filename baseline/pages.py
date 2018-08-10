@@ -15,7 +15,7 @@ class Instructions(Page):
     form_fields = ['time_Instructions']
     #timeout_seconds = Constants.pageTimeout
     def vars_for_template(self):
-        self.player.baseline_problems = Constants.problems
+        self.player.baseline_answers = Constants.answers
         return {
             'problems': Constants.problems
         }

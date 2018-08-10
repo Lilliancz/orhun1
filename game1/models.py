@@ -32,6 +32,7 @@ class Constants(BaseConstants):
     upper_bound = settings.SESSION_CONFIGS[0]['upper_bound']
 
     problems = []
+    answers=[]
     
     # create list of problems.
     # this is done serverside instead of clientside because everyone has the same problems, and
@@ -61,6 +62,7 @@ class Constants(BaseConstants):
         entry = (words, answer)
 
         problems.append(entry)
+        answers.append(answer)
 
 
 class Subsession(BaseSubsession):
