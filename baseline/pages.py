@@ -17,7 +17,8 @@ class Instructions(Page):
     def vars_for_template(self):
         self.player.baseline_answers = ', '.join(str(x) for x in Constants.answers)
         return {
-            'problems': Constants.problems
+            'problems': Constants.problems,
+            'answers': Constants.answers
         }
 
 # baseline task
@@ -31,7 +32,8 @@ class Baseline(Page):
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
-            'problems': Constants.problems
+            'problems': Constants.problems,
+            'answers': Constants.answers
         }
 
     # is called after the timer runs out and this page's forms are submitted

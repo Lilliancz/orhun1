@@ -32,6 +32,10 @@ class Comprehension(Page):
      form_model = 'player'
      timeout_seconds = Constants.pageTimeout
 
+     def vars_for_template(self):
+         return {
+             'answers': Constants.problems
+         }
      def is_displayed(self):
 ##set list of answers as string
          self.player.game1_answers = ', '.join(str(x) for x in Constants.answers)
@@ -137,7 +141,8 @@ class Game1(Page):
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
-            'problems': Constants.problems
+            'problems': Constants.problems,
+            'answers': Constants.problems
         }
 
     # is called after the timer runs out and this page's forms are submitted

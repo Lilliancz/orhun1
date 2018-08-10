@@ -44,8 +44,9 @@ class Constants(BaseConstants):
     # inflect is used to convert numbers to words easily
     n2w = inflect.engine()
     
-    # assuming no one can do more than 500 problems in 2 minutes 
-    for n in range(500):
+    # assuming no one can do more than 500 problems in 2 minutes
+    # or 100
+    for n in range(100):
         v1 = random.randint(lower_bound, upper_bound)
         v2 = random.randint(lower_bound, upper_bound)
         v3 = random.randint(lower_bound, upper_bound)
