@@ -33,7 +33,8 @@ class Comprehension(Page):
      timeout_seconds = Constants.pageTimeout
 
      def is_displayed(self):
-         self.player.game1_answers
+##set list of answers as string
+         self.player.game1_answers = ', '.join(str(x) for x in Constants.answers)
          self.player.get_wait1()
          return True
 

@@ -96,7 +96,7 @@ class Player(BasePlayer):
     game1_score = models.IntegerField()
 
     # problems from game1 task
-    game1_problems = models.StringField()
+    game1_answers = models.StringField()
 
     # player's rank out of 3
     game1_rank = models.IntegerField()
