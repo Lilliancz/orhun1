@@ -33,7 +33,7 @@ SESSION_CONFIGS = [
        'lower_bound': 0,
        'upper_bound': 25,
        'min_players': 3,
-       'time_limit': 90
+       'time_limit': 5
     }
 ]
 

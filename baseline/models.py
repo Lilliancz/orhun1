@@ -7,7 +7,7 @@ import inflect
 import random
 from django.conf import settings
 
-author = 'Eli Pandolfo'
+author = 'Eli Pandolfo, modified by Xiaotian Lu and Lillian Chen'
 
 ''' notes
 
@@ -25,48 +25,51 @@ class Constants(BaseConstants):
     num_rounds = 1
 
 
-    # these are variable and can be set to anything by the person running the experiment.
-    # 0 and 100 are the default values
-    lower_bound = settings.SESSION_CONFIGS[0]['lower_bound']
-    upper_bound = settings.SESSION_CONFIGS[0]['upper_bound']
-
-    problems = []
-    answers=[]
-    # create list of problems.
-    # this is done serverside instead of clientside because everyone has the same problems, and
-    # because converting numbers to words is easier in python than in JS.
-    
-    # JSON converts python tuples to JS lists, so this data structure is a list
-    # of pairs, each holding a triple and its sum. 
-    # [ ( ('two', 'fifteen', 'forty four'), 61 )... ]
-    
-    # numbers are randomly generated between lower_bound and upper_bound, both inclusive.
-    # inflect is used to convert numbers to words easily
-    n2w = inflect.engine()
-    
-    # assuming no one can do more than 500 problems in 2 minutes
-    # or 100
-    for n in range(100):
-        v1 = random.randint(lower_bound, upper_bound)
-        v2 = random.randint(lower_bound, upper_bound)
-        v3 = random.randint(lower_bound, upper_bound)
-        
-        answer = v1 + v2 + v3
-        
-        s1 = n2w.number_to_words(v1).capitalize()
-        s2 = n2w.number_to_words(v2)
-        s3 = n2w.number_to_words(v3)
-
-        words = (s1, s2, s3)
-        entry = (words, answer)
-
-        problems.append(entry)
-        answers.append(answer)
 
 
 class Subsession(BaseSubsession):
-    pass
+    def creating_session(self):
+        if self.round_number == 1:
+            # these are variable and can be set to anything by the person running the experiment.
+            # 0 and 100 are the default values
+            lower_bound = settings.SESSION_CONFIGS[0]['lower_bound']
+            upper_bound = settings.SESSION_CONFIGS[0]['upper_bound']
 
+            problems = []
+            answers = []
+            # create list of problems.
+            # this is done serverside instead of clientside because everyone has the same problems, and
+            # because converting numbers to words is easier in python than in JS.
+
+            # JSON converts python tuples to JS lists, so this data structure is a list
+            # of pairs, each holding a triple and its sum.
+            # [ ( ('two', 'fifteen', 'forty four'), 61 )... ]
+
+            # numbers are randomly generated between lower_bound and upper_bound, both inclusive.
+            # inflect is used to convert numbers to words easily
+            n2w = inflect.engine()
+
+            # assuming no one can do more than 500 problems in 2 minutes
+            # or 100
+            for n in range(100):
+                v1 = random.randint(lower_bound, upper_bound)
+                v2 = random.randint(lower_bound, upper_bound)
+                v3 = random.randint(lower_bound, upper_bound)
+
+                answer = v1 + v2 + v3
+
+                s1 = n2w.number_to_words(v1).capitalize()
+                s2 = n2w.number_to_words(v2)
+                s3 = n2w.number_to_words(v3)
+
+                words = (s1, s2, s3)
+                entry = (words, answer)
+
+                problems.append(entry)
+                answers.append(answer)
+
+            self.session.vars['baseline_problems'] = problems
+            self.session.vars['baseline_answers'] = answers
 
 class Group(BaseGroup):
     pass

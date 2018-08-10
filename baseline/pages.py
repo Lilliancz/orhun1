@@ -8,18 +8,18 @@ from django.conf import settings
 
 class General(Page):
     #timeout_seconds = Constants.pageTimeout
-    pass
+    def vars_for_template(self):
+        self.player.baseline_answers = ', '.join(str(x) for x in self.session.vars['baseline_answers'])
+        return {
+            'problems': self.session.vars['baseline_problems'],
+            'answers': self.session.vars['baseline_answers']
+        }
 
 class Instructions(Page):
     form_model = 'player'
     form_fields = ['time_Instructions']
     #timeout_seconds = Constants.pageTimeout
-    def vars_for_template(self):
-        self.player.baseline_answers = ', '.join(str(x) for x in Constants.answers)
-        return {
-            'problems': Constants.problems,
-            'answers': Constants.answers
-        }
+
 
 # baseline task
 class Baseline(Page):
@@ -32,8 +32,8 @@ class Baseline(Page):
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
-            'problems': Constants.problems,
-            'answers': Constants.answers
+            'problems': self.session.vars['baseline_problems'],
+            'answers': self.session.vars['baseline_answers']
         }
 
     # is called after the timer runs out and this page's forms are submitted

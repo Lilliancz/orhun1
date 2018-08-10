@@ -15,7 +15,7 @@ class Game1WaitPage(WaitPage):
 class WhatHappensNextA(Page):
     form_model = 'player'
     timeout_seconds = Constants.pageTimeout
-	
+
     def is_displayed(self):
         return self.player.id_in_group == 1
 
@@ -26,24 +26,36 @@ class WhatHappensNextB(Page):
     def is_displayed(self):
         return self.player.role() == 'notchooser'
 
-
 #Comprehension Questions for everyone
 class Comprehension(Page):
-     form_model = 'player'
-     timeout_seconds = Constants.pageTimeout
+    form_model = 'player'
+    timeout_seconds = Constants.pageTimeout
 
-     def vars_for_template(self):
-         return {
-             'answers': Constants.problems
-         }
-     def is_displayed(self):
-##set list of answers as string
-         self.player.game1_answers = ', '.join(str(x) for x in Constants.answers)
-         self.player.get_wait1()
-         return True
+    def vars_for_template(self):
 
-     def get_form_fields(self):
-         #Show questions based on role
+        # get 3 roles
+        p1 = self.group.get_player_by_id(1)
+        p2 = self.group.get_player_by_id(2)
+        p3 = self.group.get_player_by_id(3)
+
+        # assign same problems and answers for each member of group
+        p2.participant.vars['game1_problems']=p1.participant.vars['game1_problems']
+        p3.participant.vars['game1_problems']=p1.participant.vars['game1_problems']
+
+        p2.participant.vars['game1_answers']=p1.participant.vars['game1_answers']
+        p3.participant.vars['game1_answers']=p1.participant.vars['game1_answers']
+
+        # set list of answers as string so we can see them in dataset
+        self.player.game1_answers = ', '.join(str(x) for x in self.participant.vars['game1_answers'])
+        self.player.get_wait1()
+
+        return {
+            'problems': self.participant.vars['game1_problems'],
+            'answers': self.participant.vars['game1_answers']
+        }
+
+    def get_form_fields(self):
+        #Show questions based on role
         if self.player.id_in_group == 1:
             return ['q2', 'q3', 'q4']
         else:
@@ -51,7 +63,6 @@ class Comprehension(Page):
 
 class CompResults(Page):
     timeout_seconds = Constants.pageTimeout
-
 
 # one player in each group chooses firm A or firm B
 class ChooseFirm(Page):
@@ -106,8 +117,6 @@ class Game1FirmWaitPage(WaitPage):
     when all three participants have arrived to this page. Please do not leave, the wait should not be long. \
     If you are inactive for a while (not on a wait page), you will be kicked out of the study and not get any bonus."
 
-
-
 # Show firm for game 1
 class Game1Firm(Page):
     form_model = 'player'
@@ -141,8 +150,8 @@ class Game1(Page):
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
-            'problems': Constants.problems,
-            'answers': Constants.problems
+            'problems': self.participant.vars['game1_problems'],
+            'answers': self.participant.vars['game1_answers']
         }
 
     # is called after the timer runs out and this page's forms are submitted
@@ -253,9 +262,6 @@ class Debrief(Page):
 
 class copyMturkCode(Page):
     pass
-
-
-
 
 page_sequence = [
     Game1WaitPage,
