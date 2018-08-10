@@ -3,6 +3,7 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 import inflect
 from django.conf import settings
+from otree_mturk_utils.pages import CustomMturkPage, CustomMturkWaitPage
 
 # overall instructions & baseline instructions
 
