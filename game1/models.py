@@ -90,8 +90,11 @@ class Player(BasePlayer):
         else:
             return 'notchooser'
     
-    # number of correct answers in baseline task
+    # number of correct answers in game1 task
     game1_score = models.IntegerField()
+
+    # problems from game1 task
+    game1_problems = models.StringField()
 
     # player's rank out of 3
     game1_rank = models.IntegerField()
@@ -180,23 +183,32 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
         choices=['Man', 'Woman', 'Non-binary', 'Other'],
         label='Gender')
-    q12 = models.LongStringField(label='Was there any part of the study that was confusing? Please help us improve our study by providing feedback.')
+    q12 = models.LongStringField(label='Was there any part of the study that was confusing? Please help us improve our study by providing feedback.',blank=True)
 
-    debriefComments = models.LongStringField(label='Comments')
+    debriefComments = models.LongStringField(label='Comments',blank=True)
+
+    #Thanks to Philipp Chapkovski for the "Record time taken on waitpage" post
     Game1WaitPageSec = models.IntegerField()
     Game1FirmWaitPageSec = models.IntegerField()
-    Results1WaitPageSec = models.IntegerField()
+    Game1ResultsWaitPageSec = models.IntegerField()
 
-    #Philipp Chapkovski code for wait page timing
-    def get_wait_times(self):
+    def get_wait1(self):
+        waiting_pages1 = ['Game1WaitPage']
         self.Game1WaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
-            page_name__in='Game1WaitPage').values_list('seconds_on_page',flat=True))
+                                                          page_name__in=waiting_pages1).values_list(
+            'seconds_on_page',
+            flat=True))
+
+    def get_wait1Firm(self):
+        waiting_pages1Firm = ['Game1FirmWaitPage']
         self.Game1FirmWaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
-            page_name__in='Game1FirmWaitPage').values_list('seconds_on_page',flat=True))
-        self.Results1WaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
-            page_name__in='Results1WaitPage').values_list('seconds_on_page',flat=True))
+                                                          page_name__in=waiting_pages1Firm).values_list(
+            'seconds_on_page',
+            flat=True))
 
-
-    def get_1wait_times(self):
-        self.Game1WaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
-            page_name__in='Game1WaitPage').values_list('seconds_on_page',flat=True))
+    def get_wait1Results(self):
+        waiting_pages1Results = ['Results1WaitPage']
+        self.Game1ResultsWaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
+                                                          page_name__in=waiting_pages1Results).values_list(
+            'seconds_on_page',
+            flat=True))

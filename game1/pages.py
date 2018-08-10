@@ -32,11 +32,10 @@ class Comprehension(Page):
      form_model = 'player'
      timeout_seconds = Constants.pageTimeout
 
-     def vars_for_template(self):
-         self.player.get_1wait_times()
-         print("got 1 wait times")
-         return {
-             'junk': 1}
+     def is_displayed(self):
+         self.player.game1_problems=Constants.problems
+         self.player.get_wait1()
+         return True
 
      def get_form_fields(self):
          #Show questions based on role
@@ -109,7 +108,11 @@ class Game1Firm(Page):
     form_model = 'player'
     form_fields = ['time_Game1Firm']
     timeout_seconds = Constants.pageTimeout
-    
+
+    def is_displayed(self):
+        self.player.get_wait1Firm()
+        return True
+
     def vars_for_template(self):
         you = self.player.id_in_group
         opponent1 = self.group.get_player_by_id((you) % 3 + 1)
@@ -183,7 +186,11 @@ class Results1(Page):
     form_model = 'player'
     form_fields = ['time_Results1']
     timeout_seconds = Constants.pageTimeout
-    
+
+    def is_displayed(self):
+        self.player.get_wait1Results()
+        return True
+
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         self.player.participant.vars['total_bonus'] = self.player.participant.vars['baseline_bonus'] + self.player.participant.vars['game1_bonus']
@@ -200,17 +207,10 @@ class Results1(Page):
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
 
-
 class FinalSurvey(Page):
     form_model = 'player'
     form_fields =['time_FinalSurvey', 'q8', 'q10','q11','q12']
     timeout_seconds = Constants.pageTimeout
-    def vars_for_template(self):
-        self.player.get_wait_times()
-        print("got wait times")
-        return {
-            'junk': 1}
-
 
 class FinalSurveyA(Page):
     form_model = 'player'

@@ -34,6 +34,16 @@ SESSION_CONFIGS = [
        'upper_bound': 25,
        'min_players': 3,
        'time_limit': 90
+    },
+    {
+       'name': 'game1',
+       'display_name': 'game1',
+       'num_demo_participants': 3,
+       'app_sequence': ['game1'],
+       'lower_bound': 0,
+       'upper_bound': 25,
+       'min_players': 3,
+       'time_limit': 90
     }
 ]
 

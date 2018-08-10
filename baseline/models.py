@@ -18,6 +18,7 @@ class Constants(BaseConstants):
     name_in_url = 'BaselineTask'
     pageTimeout = 60
     gameDuration = "90 seconds"
+    pageTimeoutWord = "60 seconds"
 
     # Do not change
     players_per_group = None
@@ -73,8 +74,8 @@ class Player(BasePlayer):
     
     # number of correct answers in baseline task
     baseline_score = models.IntegerField()
-
     baseline_bonus = models.CurrencyField()
+    baseline_problems = models.StringField()
 
     # number of problems attempted
     attempted = models.IntegerField()
