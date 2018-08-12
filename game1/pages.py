@@ -6,34 +6,51 @@ import inflect
 from django.conf import settings
 from otree_mturk_utils.pages import CustomMturkPage, CustomMturkWaitPage
 
+
+# MANY Thanks to Philipp Chapkovski for the "Record time taken on waitpage" post - Lillian
+
+
 # wait page before game 1
 class Game1WaitPage(CustomMturkWaitPage):
     group_by_arrival_time = True
-    startwp_timer = 120
+
     #seconds before they can just get paid
+    startwp_timer = settings.SESSION_CONFIGS[0]['startwp_timer']
+
+    #skips to end if no partners show up
     skip_until_the_end_of = 'app'
+
 
 class WhatHappensNextA(CustomMturkPage):
     form_model = 'player'
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
 
     def is_displayed(self):
         return self.player.id_in_group == 1
 
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutWhatHappensA = 1
+
+
 class WhatHappensNextB(CustomMturkPage):
     form_model = 'player'
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
 
     def is_displayed(self):
         return self.player.role() == 'notchooser'
 
-#Comprehension Questions for everyone
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutWhatHappensB = 1
+
+
+# Comprehension Questions for everyone
 class Comprehension(CustomMturkPage):
     form_model = 'player'
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
 
     def vars_for_template(self):
-
         # get 3 roles
         p1 = self.group.get_player_by_id(1)
         p2 = self.group.get_player_by_id(2)
@@ -49,28 +66,36 @@ class Comprehension(CustomMturkPage):
         # set list of answers as string so we can see them in dataset
         self.player.game1_answers = ', '.join(str(x) for x in self.participant.vars['game1_answers'])
 
-
         return {
             'problems': self.participant.vars['game1_problems'],
             'answers': self.participant.vars['game1_answers']
         }
 
     def get_form_fields(self):
-        #Show questions based on role
+        # Show questions based on role
         if self.player.id_in_group == 1:
             return ['q2', 'q3', 'q4']
         else:
             return ['q2', 'q3']
 
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutComp = 1
+
+
 class CompResults(CustomMturkPage):
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
+
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutCompResults = 1
+
 
 # one player in each group chooses firm A or firm B
 class ChooseFirm(CustomMturkPage):
     form_model = 'player'
-
-    timeout_seconds = Constants.pageTimeout
     timeout_submission = {'firm': 'B'}
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
 
     def is_displayed(self):
         return self.player.id_in_group == 1
@@ -79,6 +104,7 @@ class ChooseFirm(CustomMturkPage):
         return {
             'choice': self.player.participant.vars['choice'],
             'rval': random.randrange(5, 55, 5),
+            'pageTimeoutWording': self.session.config.get('pageTimeoutWording')
         }
 
     def get_form_fields(self):
@@ -91,12 +117,14 @@ class ChooseFirm(CustomMturkPage):
         for p in self.group.get_players():
             p.participant.vars['firm'] = self.player.firm
             p.firm = self.player.firm
+        if self.timeout_happened:
+            self.player.TimeoutChooseFirm = 1
 
 
 # Ask why player 1 chose Firm
 class WhyFirm(CustomMturkPage):
     form_model = 'player'
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
 
     def is_displayed(self):
         return self.player.id_in_group == 1
@@ -112,6 +140,11 @@ class WhyFirm(CustomMturkPage):
             'firm': self.player.participant.vars['firm']
         }
 
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutWhyFirm = 1
+
+
 # wait page for all 3 group members
 class Game1FirmWaitPage(CustomMturkWaitPage):
     title_text = "Please wait while other participants are finishing up."
@@ -120,15 +153,17 @@ class Game1FirmWaitPage(CustomMturkWaitPage):
     If you are inactive for a while (not on a wait page), you will be kicked out of the study and not get any bonus."
     group_by_arrival_time = False
 
+
 # Show firm for game 1
 class Game1Firm(CustomMturkPage):
     form_model = 'player'
     form_fields = ['time_Game1Firm']
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['timeout_seconds']
 
-    def is_displayed(self):
-        self.player.get_wait1Firm()
-        return True
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutGame1Firm = 1
+        self.player.get_wait1_firm()
 
     def vars_for_template(self):
         you = self.player.id_in_group
@@ -142,21 +177,23 @@ class Game1Firm(CustomMturkPage):
             'opponent2': opponent2.participant.vars['baseline_score']
         }
 
+
 # game 1 task
 class Game1(CustomMturkPage):
     form_model = 'player'
     form_fields = ['game1_score', 'attempted', 'time_Game1']
-
-    # timer until page automatically submits itself
     timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
-    
+
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutGame1 = 1
+
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
             'problems': self.participant.vars['game1_problems'],
             'answers': self.participant.vars['game1_answers']
         }
-
 
 
 class Results1WaitPage(CustomMturkWaitPage):
@@ -167,11 +204,7 @@ class Results1WaitPage(CustomMturkWaitPage):
 class Results1(CustomMturkPage):
     form_model = 'player'
     form_fields = ['time_Results1']
-    timeout_seconds = Constants.pageTimeout
-
-    def is_displayed(self):
-        self.player.get_wait1Results()
-        return True
+    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
@@ -202,13 +235,11 @@ class Results1(CustomMturkPage):
                 players[i].participant.vars['game1_rank'] = i + 1
                 # need to change bonus structure here
                 if players[i].game1_rank == 1:
-                    players[i].game1_bonus = Constants.first_place_bonus
-                    players[i].participant.vars['game1_bonus'] = Constants.first_place_bonus
-                    players[i].participant.payoff += Constants.first_place_bonus
+                    players[i].game1_bonus = self.session.config.get('first_place_bonus')
+                    players[i].participant.vars['game1_bonus'] = self.session.config.get('first_place_bonus')
                 if players[i].game1_rank == 2:
-                    players[i].game1_bonus = Constants.second_place_bonus
-                    players[i].participant.vars['game1_bonus'] = Constants.second_place_bonus
-                    players[i].participant.payoff += Constants.second_place_bonus
+                    players[i].game1_bonus = self.session.config.get('second_place_bonus')
+                    players[i].participant.vars['game1_bonus'] = self.session.config.get('second_place_bonus')
                 if players[i].game1_rank == 3:
                     players[i].game1_bonus = 0
                     players[i].participant.vars['game1_bonus'] = 0
@@ -228,17 +259,33 @@ class Results1(CustomMturkPage):
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
 
+    def before_next_page(self):
+        self.player.get_wait1_results()
+        self.player.payoff = self.player.game1_bonus
+        print(self.player.payoff)
+        if self.timeout_happened:
+            self.player.TimeoutResults1 = 1
+
+
+
 class FinalSurvey(CustomMturkPage):
     form_model = 'player'
     form_fields =['time_FinalSurvey', 'q8', 'q10','q11','q12']
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutFinalSurvey = 1
+
 
 class FinalSurveyA(CustomMturkPage):
     form_model = 'player'
     form_fields =['q7_choice', 'q7']
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+
     def is_displayed(self):
         return self.player.id_in_group == 1
+
     def vars_for_template(self):
         firm = self.player.participant.vars['firm']
         return {
@@ -246,10 +293,20 @@ class FinalSurveyA(CustomMturkPage):
         If given the choice again, would you still choose Firm '+firm+' or would you change your choice?'
         }
 
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutFinalSurveyA = 1
+
+
 class PerformancePayment(CustomMturkPage):
     form_model = 'player'
     form_fields = ['time_PerformancePayment']
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutPayment = 1
+
     def vars_for_template(self):
         return {
             'attempted': self.player.attempted,
@@ -257,25 +314,32 @@ class PerformancePayment(CustomMturkPage):
             'baseline_bonus': c(self.player.participant.vars['baseline_bonus']),
             'total_bonus': c(self.player.total_bonus),
 
-            # automoatically pluralizes the word 'problem' if necessary
+            # automatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
+
 
 class Debrief(CustomMturkPage):
     form_model = 'player'
     form_fields = ['debriefComments','time_Debrief']
-    timeout_seconds = Constants.pageTimeout
+    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
-class copyMturkCode(Page):
+    def before_next_page(self):
+        if self.timeout_happened:
+            self.player.TimeoutDebrief = 1
+
+
+class CopyMturkCode(Page):
     def is_displayed(self):
         self.player.get_wait1()
         return 1
     pass
 
+
 page_sequence = [
     Game1WaitPage,
-	WhatHappensNextA,
-	WhatHappensNextB,
+    WhatHappensNextA,
+    WhatHappensNextB,
     Comprehension,
     CompResults,
     ChooseFirm,
@@ -289,5 +353,5 @@ page_sequence = [
     FinalSurveyA,
     PerformancePayment,
     Debrief,
-    copyMturkCode
+    CopyMturkCode
 ]

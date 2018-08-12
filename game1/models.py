@@ -12,15 +12,12 @@ author = 'Eli Pandolfo, modified by Xiaotian Lu and Lillian Chen'
 ''' notes
 
 '''
+
+
 class Constants(BaseConstants):
 
     # can be changed to anything
     name_in_url = 'Game1'
-    pageTimeout = 60
-    first_place_bonus = 2.5
-    second_place_bonus = 1
-    gameDuration = "90 seconds"
-    pageTimeoutWording = "1 minute"
 
     # Do not change
     players_per_group = 3
@@ -35,7 +32,7 @@ class Subsession(BaseSubsession):
 # this controls if the offer to switch will be made.
 # if choice = 1 then
         for p in self.get_players():
-            #p.participant.vars['choice'] = (1 if random.random() >= 0.5 else 2)
+            # p.participant.vars['choice'] = (1 if random.random() >= 0.5 else 2)
             p.participant.vars['choice'] = 1
 
         if self.round_number == 1:
@@ -44,8 +41,8 @@ class Subsession(BaseSubsession):
 
                 # these are variable and can be set to anything by the person running the experiment.
                 # 0 and 100 are the default values
-                lower_bound = settings.SESSION_CONFIGS[0]['lower_bound']
-                upper_bound = settings.SESSION_CONFIGS[0]['upper_bound']
+                lower_bound = self.session.config.get('lower_bound')
+                upper_bound = self.session.config.get('upper_bound')
 
                 problems = []
                 answers = []
@@ -82,6 +79,7 @@ class Subsession(BaseSubsession):
 
                 p.participant.vars['game1_problems'] = problems
                 p.participant.vars['game1_answers'] = answers
+
 
 class Group(BaseGroup):
     pass
@@ -150,6 +148,20 @@ class Player(BasePlayer):
     # time_Survey45 = models.StringField()
 
 
+    #timeout happened
+    TimeoutWhatHappensA = models.BooleanField(initial=0)
+    TimeoutWhatHappensB = models.BooleanField(initial=0)
+    TimeoutComp = models.BooleanField(initial=0)
+    TimeoutCompResults = models.BooleanField(initial=0)
+    TimeoutChooseFirm = models.BooleanField(initial=0)
+    TimeoutWhyFirm = models.BooleanField(initial=0)
+    TimeoutGame1Firm = models.BooleanField(initial=0)
+    TimeoutResults1 = models.BooleanField(initial=0)
+    TimeoutFinalSurvey = models.BooleanField(initial=0)
+    TimeoutFinalSurveyA = models.BooleanField(initial=0)
+    TimeoutPayment = models.BooleanField(initial=0)
+    TimeoutDebrief = models.BooleanField(initial=0)
+
     q2 = models.StringField(
         widget=widgets.RadioSelect,
         choices=['2 others', '3 others', '4 others'],
@@ -173,9 +185,6 @@ class Player(BasePlayer):
     #     to compete in? Your answer will not affect the assignment in any way.')
 
     q6 = models.StringField(label='Why did you choose this firm?')
-
-
-
     q7_choice = models.StringField(
         widget=widgets.RadioSelect,
         choices=['Keep Firm', 'Change Firm'])
@@ -190,11 +199,12 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
         choices=['Man', 'Woman', 'Non-binary', 'Other'],
         label='Gender')
-    q12 = models.LongStringField(label='Was there any part of the study that was confusing? Please help us improve our study by providing feedback.',blank=True)
+    q12 = models.LongStringField(label='Was there any part of the study that was confusing? \
+        Please help us improve our study by providing feedback.',blank=True)
 
     debriefComments = models.LongStringField(label='Comments',blank=True)
 
-    #Thanks to Philipp Chapkovski for the "Record time taken on waitpage" post
+    # Thanks to Philipp Chapkovski for the "Record time taken on waitpage" post
     Game1WaitPageSec = models.IntegerField()
     Game1FirmWaitPageSec = models.IntegerField()
     Game1ResultsWaitPageSec = models.IntegerField()
@@ -206,16 +216,16 @@ class Player(BasePlayer):
             'seconds_on_page',
             flat=True))
 
-    def get_wait1Firm(self):
-        waiting_pages1Firm = ['Game1FirmWaitPage']
+    def get_wait1_firm(self):
+        waiting_pages1_firm = ['Game1FirmWaitPage']
         self.Game1FirmWaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
-                                                          page_name__in=waiting_pages1Firm).values_list(
+                                                          page_name__in=waiting_pages1_firm).values_list(
             'seconds_on_page',
             flat=True))
 
-    def get_wait1Results(self):
-        waiting_pages1Results = ['Results1WaitPage']
+    def get_wait1_results(self):
+        waiting_pages1_results = ['Results1WaitPage']
         self.Game1ResultsWaitPageSec = sum(PageCompletion.objects.filter(participant=self.participant,
-                                                          page_name__in=waiting_pages1Results).values_list(
+                                                          page_name__in=waiting_pages1_results).values_list(
             'seconds_on_page',
             flat=True))

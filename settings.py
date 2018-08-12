@@ -26,14 +26,20 @@ SESSION_CONFIG_DEFAULTS = {
 
 SESSION_CONFIGS = [
     {
-       'name': 'pilot',
-       'display_name': 'pilot',
-       'num_demo_participants': 3,
-       'app_sequence': ['baseline', 'game1'],
-       'lower_bound': 0,
-       'upper_bound': 25,
-       'min_players': 3,
-       'time_limit': 30
+        'name': 'pilot',
+        'display_name': 'pilot',
+        'num_demo_participants': 3,
+        'app_sequence': ['baseline', 'game1'],
+        'lower_bound': 0,
+        'upper_bound': 25,
+        'min_players': 3,
+        'time_limit': 15,
+        'timeout_seconds': 10,
+        'gameDuration': "90 seconds",
+        'pageTimeoutWording': "60 seconds",
+        'first_place_bonus': 2.5,
+        'second_place_bonus': 1,
+        'startwp_timer':15
     }
 ]
 
