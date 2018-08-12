@@ -7,8 +7,7 @@ import inflect
 import random
 from django.conf import settings
 
-draft_author = 'Eli Pandolfo'
-final_author = 'Lillian Chen'
+author = 'Lillian Chen, based off initial draft by Eli Pandolfo'
 
 ''' notes
 

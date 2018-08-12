@@ -7,7 +7,7 @@ import random
 from django.conf import settings
 from otree.models_concrete import PageCompletion
 
-author = 'Eli Pandolfo, modified by Xiaotian Lu and Lillian Chen'
+author = 'Lillian Chen, based off initial draft by Eli Pandolfo'
 
 ''' notes
 
