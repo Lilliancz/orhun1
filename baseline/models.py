@@ -7,7 +7,7 @@ import inflect
 import random
 from django.conf import settings
 
-author = 'Lillian Chen, based off initial draft by Eli Pandolfo'
+author = 'Lillian Chen. Special thanks to Eli Pandolfo for the basic structure, and Xiaotian Lu for initial edits.'
 
 ''' notes
 
@@ -46,8 +46,8 @@ class Subsession(BaseSubsession):
             n2w = inflect.engine()
 
             # assuming no one can do more than 500 problems in 2 minutes
-            # or 100
-            for n in range(100):
+            # or 200
+            for n in range(200):
                 v1 = random.randint(lower_bound, upper_bound)
                 v2 = random.randint(lower_bound, upper_bound)
                 v3 = random.randint(lower_bound, upper_bound)
@@ -89,4 +89,3 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField()
 
-    TimeoutBaseline = models.BooleanField(initial=False)

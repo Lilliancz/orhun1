@@ -39,7 +39,10 @@ SESSION_CONFIGS = [
         'pageTimeoutWording': "60 seconds",
         'first_place_bonus': 2.5,
         'second_place_bonus': 1,
-        'startwp_timer': 300
+        'startwp_timer': 300,
+        'doc': """
+            The timeout_seconds, time_limit, and startwp_timer are not configurable at this time.
+            """
     }
 ]
 

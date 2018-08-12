@@ -191,13 +191,14 @@ class Game1(CustomMturkPage):
             'answers': self.participant.vars['game1_answers']
         }
 
-    def before_next_page(self):
-        if self.timeout_happened:
-            self.player.TimeoutGame1 = True
-
 
 class Results1WaitPage(CustomMturkWaitPage):
     group_by_arrival_time = False
+
+    def after_all_players_arrive(self):
+        # is called after the timer runs out and game 1 forms are submitted
+        # sets payoffs for group
+        self.group.set_payoffs()
 
 
 # game 1 results
@@ -208,43 +209,11 @@ class Results1(CustomMturkPage):
 
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
-        # is called after the timer runs out and this page's forms are submitted
         # sets the participant.vars to transfer to next round
-
         self.player.participant.vars['game1_attempted'] = self.player.attempted
         self.player.participant.vars['game1_score'] = self.player.game1_score
-
-        # in case 2 players have a tied score, chance decides how bonuses are distributed
-        p1 = self.group.get_player_by_id(1)
-        p2 = self.group.get_player_by_id(2)
-        p3 = self.group.get_player_by_id(3)
-
-        # sorted() is guaranteed to be stable, so the list is shuffled first to ensure randomness
-        players = sorted(random.sample([p1, p2, p3], k=3), key=lambda x: x.game1_score, reverse=True)
-
-        for i in range(3):
-            # if score is zero, auto rank 3rd, no bonus
-            if players[i].game1_score == 0:
-                players[i].game1_rank = 3
-                players[i].participant.vars['game1_rank'] = 3
-                players[i].game1_bonus = 0
-                players[i].participant.vars['game1_bonus'] = 0
-            # if not score of zero, then rank in order of highest score in game 1
-            else:
-                players[i].game1_rank = i + 1
-                players[i].participant.vars['game1_rank'] = i + 1
-                # need to change bonus structure here
-                if players[i].game1_rank == 1:
-                    players[i].game1_bonus = self.session.config.get('first_place_bonus')
-                    players[i].participant.vars['game1_bonus'] = self.session.config.get('first_place_bonus')
-                if players[i].game1_rank == 2:
-                    players[i].game1_bonus = self.session.config.get('second_place_bonus')
-                    players[i].participant.vars['game1_bonus'] = self.session.config.get('second_place_bonus')
-                if players[i].game1_rank == 3:
-                    players[i].game1_bonus = 0
-                    players[i].participant.vars['game1_bonus'] = 0
-
-        self.player.participant.vars['total_bonus'] = self.player.participant.vars['baseline_bonus'] + self.player.participant.vars['game1_bonus']
+        self.player.participant.vars['total_bonus'] = self.player.participant.vars['baseline_bonus'] \
+                                                      + self.player.participant.vars['game1_bonus']
         self.player.total_bonus = self.player.participant.vars['total_bonus']
 
         return {
@@ -265,7 +234,6 @@ class Results1(CustomMturkPage):
         print(self.player.payoff)
         if self.timeout_happened:
             self.player.TimeoutResults1 = True
-
 
 
 class FinalSurvey(CustomMturkPage):

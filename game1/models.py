@@ -7,7 +7,7 @@ import random
 from django.conf import settings
 from otree.models_concrete import PageCompletion
 
-author = 'Lillian Chen, based off initial draft by Eli Pandolfo'
+author = 'Lillian Chen. Special thanks to Eli Pandolfo for the basic structure, and Xiaotian Lu for initial edits.'
 
 ''' notes
 
@@ -60,7 +60,8 @@ class Subsession(BaseSubsession):
                 n2w = inflect.engine()
 
                 # assuming no one can do more than 500 problems in 2 minutes
-                for n in range(500):
+                # or 200
+                for n in range(200):
                     v1 = random.randint(lower_bound, upper_bound)
                     v2 = random.randint(lower_bound, upper_bound)
                     v3 = random.randint(lower_bound, upper_bound)
@@ -82,7 +83,40 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-    pass
+    def set_payoffs(self):
+        # in case 2 players have a tied score, chance decides how bonuses are distributed
+        p1 = self.get_player_by_id(1)
+        p2 = self.get_player_by_id(2)
+        p3 = self.get_player_by_id(3)
+
+        # sorted() is guaranteed to be stable, so the list is shuffled first to ensure randomness
+        players = sorted(random.sample([p1, p2, p3], k=3), key=lambda x: x.game1_score, reverse=True)
+
+        for i in range(3):
+            # if score is zero, auto rank 3rd, no bonus
+            if players[i].game1_score == 0:
+                players[i].game1_rank = 3
+                players[i].participant.vars['game1_rank'] = 3
+                players[i].game1_bonus = 0
+                players[i].participant.vars['game1_bonus'] = 0
+            # if not score of zero, then rank in order of highest score in game 1
+            else:
+                players[i].game1_rank = i + 1
+                players[i].participant.vars['game1_rank'] = i + 1
+                # need to change bonus structure here
+                if players[i].game1_rank == 1:
+                    players[i].game1_bonus = self.session.config.get('first_place_bonus')
+                    players[i].participant.vars['game1_bonus'] = self.session.config.get('first_place_bonus')
+                    print("1st place is " + str(players[i].id))
+                if players[i].game1_rank == 2:
+                    players[i].game1_bonus = self.session.config.get('second_place_bonus')
+                    players[i].participant.vars['game1_bonus'] = self.session.config.get('second_place_bonus')
+                    print("2nd place is " + str(players[i].id))
+                if players[i].game1_rank == 3:
+                    players[i].game1_bonus = 0
+                    players[i].participant.vars['game1_bonus'] = 0
+                    print("3nd place is " + str(players[i].id))
+
 
 class Player(BasePlayer):
 
@@ -155,7 +189,6 @@ class Player(BasePlayer):
     TimeoutCompResults = models.BooleanField(initial=False)
     TimeoutChooseFirm = models.BooleanField(initial=False)
     TimeoutWhyFirm = models.BooleanField(initial=False)
-    TimeoutGame1 = models.BooleanField(initial=False)
     TimeoutGame1Firm = models.BooleanField(initial=False)
     TimeoutResults1 = models.BooleanField(initial=False)
     TimeoutFinalSurvey = models.BooleanField(initial=False)

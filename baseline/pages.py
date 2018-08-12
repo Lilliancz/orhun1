@@ -50,8 +50,6 @@ class Baseline(Page):
         self.player.participant.vars['baseline_bonus'] = self.player.baseline_bonus
         self.player.payoff = self.player.baseline_bonus
         print(self.player.payoff)
-        if self.timeout_happened:
-            self.player.TimeoutBaseline = True
 
 
 # baseline results
