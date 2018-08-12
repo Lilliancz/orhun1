@@ -149,18 +149,18 @@ class Player(BasePlayer):
 
 
     #timeout happened
-    TimeoutWhatHappensA = models.BooleanField(initial=0)
-    TimeoutWhatHappensB = models.BooleanField(initial=0)
-    TimeoutComp = models.BooleanField(initial=0)
-    TimeoutCompResults = models.BooleanField(initial=0)
-    TimeoutChooseFirm = models.BooleanField(initial=0)
-    TimeoutWhyFirm = models.BooleanField(initial=0)
-    TimeoutGame1Firm = models.BooleanField(initial=0)
-    TimeoutResults1 = models.BooleanField(initial=0)
-    TimeoutFinalSurvey = models.BooleanField(initial=0)
-    TimeoutFinalSurveyA = models.BooleanField(initial=0)
-    TimeoutPayment = models.BooleanField(initial=0)
-    TimeoutDebrief = models.BooleanField(initial=0)
+    TimeoutWhatHappensA = models.BooleanField(initial=False)
+    TimeoutWhatHappensB = models.BooleanField(initial=False)
+    TimeoutComp = models.BooleanField(initial=False)
+    TimeoutCompResults = models.BooleanField(initial=False)
+    TimeoutChooseFirm = models.BooleanField(initial=False)
+    TimeoutWhyFirm = models.BooleanField(initial=False)
+    TimeoutGame1Firm = models.BooleanField(initial=False)
+    TimeoutResults1 = models.BooleanField(initial=False)
+    TimeoutFinalSurvey = models.BooleanField(initial=False)
+    TimeoutFinalSurveyA = models.BooleanField(initial=False)
+    TimeoutPayment = models.BooleanField(initial=False)
+    TimeoutDebrief = models.BooleanField(initial=False)
 
     q2 = models.StringField(
         widget=widgets.RadioSelect,

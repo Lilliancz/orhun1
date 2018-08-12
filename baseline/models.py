@@ -89,4 +89,4 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField()
 
-    TimeoutBaseline = models.BooleanField(initial=0)
+    TimeoutBaseline = models.BooleanField(initial=False)

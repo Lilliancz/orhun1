@@ -51,7 +51,7 @@ class Baseline(Page):
         self.player.payoff = self.player.baseline_bonus
         print(self.player.payoff)
         if self.timeout_happened:
-            self.player.TimeoutBaseline = 1
+            self.player.TimeoutBaseline = True
 
 
 # baseline results
