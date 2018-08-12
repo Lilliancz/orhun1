@@ -155,6 +155,7 @@ class Player(BasePlayer):
     TimeoutCompResults = models.BooleanField(initial=False)
     TimeoutChooseFirm = models.BooleanField(initial=False)
     TimeoutWhyFirm = models.BooleanField(initial=False)
+    TimeoutGame1 = models.BooleanField(initial=False)
     TimeoutGame1Firm = models.BooleanField(initial=False)
     TimeoutResults1 = models.BooleanField(initial=False)
     TimeoutFinalSurvey = models.BooleanField(initial=False)
