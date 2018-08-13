@@ -79,6 +79,7 @@ class Comprehension(CustomMturkPage):
             return ['q2', 'q3']
 
     def before_next_page(self):
+        self.player.skip_to_end= False
         if self.timeout_happened:
             self.player.TimeoutComp = True
 
@@ -195,9 +196,12 @@ class Game1(CustomMturkPage):
 class Results1WaitPage(CustomMturkWaitPage):
     group_by_arrival_time = False
 
+# need to use skip_to_end otherwise it will try to calculate group payoffs when they skip to end
+    def is_displayed(self):
+        return not self.player.skip_to_end
+
     def after_all_players_arrive(self):
-        # is called after the timer runs out and game 1 forms are submitted
-        # sets payoffs for group
+        # sets payoffs for group if did not skip to end
         self.group.set_payoffs()
 
 
@@ -209,22 +213,11 @@ class Results1(CustomMturkPage):
 
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
-        # sets the participant.vars to transfer to next round
-        self.player.participant.vars['game1_attempted'] = self.player.attempted
-        self.player.participant.vars['game1_score'] = self.player.game1_score
-        self.player.participant.vars['total_bonus'] = self.player.participant.vars['baseline_bonus'] \
-                                                      + self.player.participant.vars['game1_bonus']
-        self.player.total_bonus = self.player.participant.vars['total_bonus']
-
         return {
             'attempted': self.player.attempted,
             'correct': self.player.game1_score,
-            'baseline_attempted': self.player.participant.vars['baseline_attempted'],
-            'baseline_score': self.player.participant.vars['baseline_score'],
-            'baseline_bonus': self.player.participant.vars['baseline_bonus'],
-            'total_bonus': self.player.participant.vars['total_bonus'],
 
-            # automoatically pluralizes the word 'problem' if necessary
+            # automatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted)
         }
 

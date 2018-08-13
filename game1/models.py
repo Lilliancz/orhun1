@@ -83,6 +83,8 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    # set payoffs when all players arrive, so that it only fires once for randomization to work correctly
+
     def set_payoffs(self):
         # in case 2 players have a tied score, chance decides how bonuses are distributed
         p1 = self.get_player_by_id(1)
@@ -116,6 +118,12 @@ class Group(BaseGroup):
                     players[i].game1_bonus = 0
                     players[i].participant.vars['game1_bonus'] = 0
                     print("3nd place is " + str(players[i].id))
+            # sets the participant.vars to transfer to next round
+            players[i].participant.vars['game1_attempted'] = players[i].attempted
+            players[i].participant.vars['game1_score'] = players[i].game1_score
+            players[i].baseline_bonus = players[i].participant.vars['baseline_bonus']
+            players[i].total_bonus = players[i].baseline_bonus + players[i].game1_bonus
+            players[i].participant.vars['total_bonus'] = players[i].total_bonus
 
 
 class Player(BasePlayer):
@@ -141,6 +149,9 @@ class Player(BasePlayer):
     # player's bonus for game 1
     game1_bonus = models.CurrencyField()
 
+    # player's bonus for baseline
+    baseline_bonus = models.CurrencyField()
+
     # combined bonus for game 1 and baseline
     total_bonus = models.CurrencyField()
 
@@ -156,6 +167,9 @@ class Player(BasePlayer):
     # whether the switch was made
     # Yes, No, N/A (not offered)
     switch = models.StringField()
+
+    # whether skipped to end
+    skip_to_end = models.BooleanField(initial=True)
 
     # these will be offered to 1/6 of all players, for others the fields will be left blank
     c5 =  models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
@@ -181,8 +195,7 @@ class Player(BasePlayer):
     # time_Survey2 = models.StringField()
     # time_Survey45 = models.StringField()
 
-
-    #timeout happened
+    # timeout happened
     TimeoutWhatHappensA = models.BooleanField(initial=False)
     TimeoutWhatHappensB = models.BooleanField(initial=False)
     TimeoutComp = models.BooleanField(initial=False)

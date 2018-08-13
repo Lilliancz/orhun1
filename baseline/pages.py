@@ -47,9 +47,9 @@ class Baseline(Page):
         self.player.participant.vars['baseline_attempted'] = self.player.attempted
         self.player.participant.vars['baseline_score'] = self.player.baseline_score
         self.player.baseline_bonus = 0.05 * self.player.baseline_score
-        self.player.participant.vars['baseline_bonus'] = self.player.baseline_bonus
         self.player.payoff = self.player.baseline_bonus
-        print(self.player.payoff)
+        self.player.participant.vars['baseline_bonus'] = self.player.payoff
+        # print(self.player.payoff)
 
 
 # baseline results
@@ -61,7 +61,7 @@ class ResultsBL(Page):
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
         return {
-            'baseline_bonus': self.participant.payoff,
+            'baseline_bonus': c(self.participant.payoff),
             # automoatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted),
             'gameDuration': self.session.config.get('gameDuration')

@@ -33,13 +33,13 @@ SESSION_CONFIGS = [
         'lower_bound': 0,
         'upper_bound': 25,
         'min_players': 3,
-        'time_limit': 90,
-        'timeout_seconds': 60,
+        'time_limit': 10,
+        'timeout_seconds': 10,
         'gameDuration': "90 seconds",
         'pageTimeoutWording': "60 seconds",
         'first_place_bonus': 2.5,
         'second_place_bonus': 1,
-        'startwp_timer': 300,
+        'startwp_timer': 10,
         'doc': """
             The timeout_seconds, time_limit, and startwp_timer are not configurable at this time.
             """
