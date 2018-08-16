@@ -256,7 +256,7 @@ class FinalSurveyB(CustomMturkPage):
         print()
         return {
             'changefirm_label': 'You were assigned firm '+firm+' in the contest. \
-        If given the choice again, which firm would you choose?',
+        If you were given the choice, which firm would you have chosen for the contest?',
             'firm': self.player.firm_in_game
         }
 
