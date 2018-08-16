@@ -77,6 +77,7 @@ class Player(BasePlayer):
     baseline_score = models.IntegerField()
     baseline_bonus = models.CurrencyField()
     baseline_answers = models.StringField()
+    comp_pass = models.BooleanField(initial=False)
 
     # number of problems attempted
     attempted = models.IntegerField()
@@ -86,6 +87,20 @@ class Player(BasePlayer):
     time_Baseline = models.StringField()
     time_ResultsBL = models.StringField()
     time_Survey1 = models.StringField()
+    time_Comprehension = models.StringField()
 
+    # expectation question after baseline
     q1 = models.IntegerField()
+
+    # comprehension questions for everyone
+    q2 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['2 others', '3 others', '4 others'],
+        label='How many players are you competing against?')
+
+    q3 = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['True', 'False'],
+        label='In Firm B, all players know each others\' scores before they compete.')
+
 

@@ -1,9 +1,7 @@
 from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
-from .models import Constants
 import inflect
 from django.conf import settings
-from otree_mturk_utils.pages import CustomMturkPage, CustomMturkWaitPage
 
 
 # overall instructions & baseline instructions
@@ -62,7 +60,7 @@ class ResultsBL(Page):
     def vars_for_template(self):
         return {
             'baseline_bonus': c(self.participant.payoff),
-            # automoatically pluralizes the word 'problem' if necessary
+            # automatically pluralizes the word 'problem' if necessary
             'problems': inflect.engine().plural('problem', self.player.attempted),
             'gameDuration': self.session.config.get('gameDuration')
         }
@@ -73,12 +71,30 @@ class Survey1(Page):
     form_fields = ['time_Survey1', 'q1']
 
 
-class IntroPart2(Page):
+class Comprehension(Page):
+    form_model = 'player'
+    form_fields = ['time_Comprehension', 'q2', 'q3']
 
     def vars_for_template(self):
         return {
             'gameDuration': self.session.config.get('gameDuration')
         }
+
+    def before_next_page(self):
+        if self.player.q2 == "2 others" and self.player.q3 == "False":
+            self.player.comp_pass = True
+
+
+class CompResults(Page):
+    pass
+
+
+class CopyMturkCode(Page):
+
+    def is_displayed(self):
+        # if comp_pass is false, it shows this page
+        # the page does not allow them to continue to game 1
+        return not self.player.comp_pass
 
 
 # sequence in which pages are displayed
@@ -88,5 +104,7 @@ page_sequence = [
     Baseline,
     ResultsBL,
     Survey1,
-    IntroPart2
+    Comprehension,
+    CompResults,
+    CopyMturkCode
 ]

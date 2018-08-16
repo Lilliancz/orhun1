@@ -25,15 +25,14 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    
+    # everything in this class is only run once
+
     def creating_session(self):
         self.group_randomly()
 
-# this controls if the offer to switch will be made.
-# if choice = 1 then
         for p in self.get_players():
-            # p.participant.vars['choice'] = (1 if random.random() >= 0.5 else 2)
-            p.participant.vars['choice'] = 1
+            # assign firm switching chance to 1 for 10 percent of the people
+            p.participant.vars['firm_switch'] = (1 if random.random() >= 0.9 else 0)
 
         if self.round_number == 1:
             for p in self.get_players():
@@ -128,15 +127,15 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    def getFirm(self):
-        return self.participant.vars['firm']
-
     def role(self):
         if self.id_in_group == 1:
             return 'chooser'
         else:
             return 'notchooser'
-    
+
+    # whether they will switch 1 or not 0
+    firm_switch = models.IntegerField()
+
     # number of correct answers in game1 task
     game1_score = models.IntegerField()
 
@@ -163,32 +162,17 @@ class Player(BasePlayer):
         # choices=['A', 'B'],
         # widget=widgets.RadioSelect
     )
-
-    # whether the switch was made
-    # Yes, No, N/A (not offered)
-    switch = models.StringField()
+    # firm in game 1 (after switch or no switch)
+    firm_in_game = models.StringField()
 
     # whether skipped to end
     skip_to_end = models.BooleanField(initial=True)
-
-    # these will be offered to 1/6 of all players, for others the fields will be left blank
-    c5 =  models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c10 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c15 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c20 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c25 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c30 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c35 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c40 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c45 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
-    c50 = models.StringField(widget=widgets.RadioSelectHorizontal, choices=["Yes", "No"])
     
     # arrival times
     time_ChooseFirm = models.StringField()
     time_Game1Firm = models.StringField()
     time_Game1 = models.StringField()
     time_Results1 = models.StringField()
-    time_Comprehension = models.StringField()
     time_Debrief = models.StringField()
     time_FinalSurvey = models.StringField()
     time_PerformancePayment = models.StringField()
@@ -198,8 +182,6 @@ class Player(BasePlayer):
     # timeout happened
     TimeoutWhatHappensA = models.BooleanField(initial=False)
     TimeoutWhatHappensB = models.BooleanField(initial=False)
-    TimeoutComp = models.BooleanField(initial=False)
-    TimeoutCompResults = models.BooleanField(initial=False)
     TimeoutChooseFirm = models.BooleanField(initial=False)
     TimeoutWhyFirm = models.BooleanField(initial=False)
     TimeoutGame1Firm = models.BooleanField(initial=False)
@@ -209,20 +191,10 @@ class Player(BasePlayer):
     TimeoutPayment = models.BooleanField(initial=False)
     TimeoutDebrief = models.BooleanField(initial=False)
 
-    q2 = models.StringField(
-        widget=widgets.RadioSelect,
-        choices=['2 others', '3 others', '4 others'],
-        label='How many other players will you be evaluated against?')
-
-    q3 = models.StringField(
-        widget=widgets.RadioSelect,
-        choices=['True', 'False'],
-        label='In Firm B, all players know each others\' scores before they compete.')
-
     q4 = models.StringField(
         widget=widgets.RadioSelect,
         choices=['Yes', 'No', 'I\'m not sure'],
-        label = 'Will your opponents also make a choice between Firm A and Firm B?')
+        label='Did your opponents also make a choice between Firm A and Firm B?')
 
     # q5 = models.StringField(
     #     widget=widgets.RadioSelect,
@@ -249,6 +221,10 @@ class Player(BasePlayer):
     q12 = models.LongStringField(label='Was there any part of the study that was confusing? \
         Please help us improve our study by providing feedback.',blank=True)
 
+    B_switch_choice = models.StringField(
+        widget=widgets.RadioSelect,
+        choices=['Firm A', 'Firm B'])
+    B_switch = models.LongStringField(label='Why?')
     debriefComments = models.LongStringField(label='Comments',blank=True)
 
     # Thanks to Philipp Chapkovski for the "Record time taken on waitpage" post

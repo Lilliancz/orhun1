@@ -19,7 +19,7 @@ mturk_hit_settings = {
 
 SESSION_CONFIG_DEFAULTS = {
     'real_world_currency_per_point': 1.00,
-    'participation_fee': 0.00,
+    'participation_fee': 1,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,
 }
@@ -40,6 +40,7 @@ SESSION_CONFIGS = [
         'first_place_bonus': 2.5,
         'second_place_bonus': 1,
         'startwp_timer': 10,
+        'participation_fee': 1,
         'doc': """
             The timeout_seconds, time_limit, and startwp_timer are not configurable at this time.
             """
