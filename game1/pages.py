@@ -193,7 +193,7 @@ class Results1WaitPage(CustomMturkWaitPage):
 class Results1(CustomMturkPage):
     form_model = 'player'
     form_fields = ['time_Results1']
-    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+    # timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     # variables that will be passed to the html and can be referenced from html or js
     def vars_for_template(self):
@@ -216,7 +216,7 @@ class Results1(CustomMturkPage):
 class FinalSurvey(CustomMturkPage):
     form_model = 'player'
     form_fields =['time_FinalSurvey', 'q8', 'q10','q11','q12']
-    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+    # timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     def before_next_page(self):
         if self.timeout_happened:
@@ -226,7 +226,7 @@ class FinalSurvey(CustomMturkPage):
 class FinalSurveyA(CustomMturkPage):
     form_model = 'player'
     form_fields = ['q7_choice', 'q7']
-    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+    # timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     def is_displayed(self):
         return self.player.id_in_group == 1
@@ -246,7 +246,7 @@ class FinalSurveyA(CustomMturkPage):
 class FinalSurveyB(CustomMturkPage):
     form_model = 'player'
     form_fields =['B_switch_choice', 'B_switch']
-    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+    # timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     def is_displayed(self):
         return self.player.role() == 'notchooser'
@@ -268,7 +268,7 @@ class FinalSurveyB(CustomMturkPage):
 class PerformancePayment(CustomMturkPage):
     form_model = 'player'
     form_fields = ['time_PerformancePayment']
-    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+    # timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     def vars_for_template(self):
         return {
@@ -289,7 +289,7 @@ class PerformancePayment(CustomMturkPage):
 class Debrief(CustomMturkPage):
     form_model = 'player'
     form_fields = ['debriefComments','time_Debrief']
-    timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
+    # timeout_seconds = settings.SESSION_CONFIGS[0]['time_limit']
 
     def before_next_page(self):
         if self.timeout_happened:

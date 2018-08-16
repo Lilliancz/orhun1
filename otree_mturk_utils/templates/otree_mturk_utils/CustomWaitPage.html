@@ -15,13 +15,18 @@
     </style>
 {% endblock %}
 {% block content %}
-    <div class="your-clock"></div>
+
 
         <div>Waiting for <span id="left_to_wait"></span> more <span id="left_to_wait_people"></span>...</div>
         <br/>
 
 
     <div id="otree-timeout-warning" class="alert alert-warning" style="display:block;">
+    <P> In 5 minutes, you will be given the chance to skip to the end of the study if you need to.
+        If you do so, you will only get the bonus from Part 1, but not Part 2.
+        We give you this option so that you have a way to earn your bonus from Part 1 if you don't
+        want to wait for others at this time. However, the wait should not be long, and you will
+        get a chance to participate in Part 2 if you wait.</P>
         <p>You can finish the study if nobody arrives in:
             <span class="glyphicon glyphicon-time"></span>
             <strong><span id="otree-timer__time-left"></span></strong>
@@ -34,7 +39,7 @@
             <button class="btn btn-primary" id='finish_study'
                     style="display: none;"
                     name="endofgame" value="{{ player.pk }}">
-                Finish the study
+                 Exit Study Now
             </button>
         </div>
         <br>
