@@ -12,7 +12,7 @@ class General(Page):
         return {
             'problems': self.session.vars['baseline_problems'],
             'answers': self.session.vars['baseline_answers'],
-            'pageTimeoutWord': self.session.config.get('pageTimeoutWord')
+            'pageTimeoutWording': self.session.config.get('pageTimeoutWording')
         }
 
 

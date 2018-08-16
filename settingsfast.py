@@ -33,7 +33,7 @@ SESSION_CONFIGS = [
         'lower_bound': 0,
         'upper_bound': 25,
         'min_players': 3,
-        'time_limit': 10,
+        'time_limit': 15,
         'timeout_seconds': 10,
         'gameDuration': "90 seconds",
         'pageTimeoutWording': "60 seconds",

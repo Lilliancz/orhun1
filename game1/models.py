@@ -28,11 +28,11 @@ class Subsession(BaseSubsession):
     # everything in this class is only run once
 
     def creating_session(self):
-        self.group_randomly()
 
         for p in self.get_players():
             # assign firm switching chance to 1 for 10 percent of the people
-            p.participant.vars['firm_switch'] = (1 if random.random() >= 0.9 else 0)
+            # change the value after >= to set percentage
+            p.participant.vars['firm_switch'] = (1 if random.random() >= 0.5 else 0)
 
         if self.round_number == 1:
             for p in self.get_players():
