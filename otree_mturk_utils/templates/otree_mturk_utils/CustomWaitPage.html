@@ -15,11 +15,11 @@
     </style>
 {% endblock %}
 {% block content %}
-    <P> Waiting for other participants...</P>
+    <P> Waiting for other participants...<BR><BR>Please do not navigate away from this tab, or you may be considered inactive.</P>
     <div id="otree-timeout-warning" class="alert alert-warning" style="display:block;">
 In 5 minutes, you will be given the chance to exit the study if you do not want to wait for others.
         However, the wait should not be long, and you will get a chance to participate in Part 2 if you wait.
-        If you decide to exit, you will only get the bonus from Part 1, but not Part 2.
+        If you decide to exit, you will only get the bonus from Part 1, but not Part 2.<BR><BR>
         <p>You can finish the study if nobody arrives in:
             <span class="glyphicon glyphicon-time"></span>
             <strong><span id="otree-timer__time-left"></span></strong>
@@ -28,9 +28,10 @@ In 5 minutes, you will be given the chance to exit the study if you do not want 
 
     <form action="" method="post" role="form" class="form">
         {% csrf_token %}
-        <div>In 5 minutes, you will be given the chance to exit the study if you do not want to wait for others.
-        However, the wait should not be long, and you will get a chance to participate in Part 2 if you wait.
-        If you decide to exit, you will only get the bonus from Part 1, but not Part 2.  <BR>Exiting the study is optional.
+        <div><div id='finish_study_words' style="display: none;">You have the chance to exit the study if you do not
+            want to wait for others. However, the wait should not be long, and you will get a chance to participate
+            in Part 2 if you wait.  If you decide to exit, you will only get the bonus from Part 1, but not Part 2.
+            <BR>Exiting the study is optional.<BR><BR></div>
             <button class="btn btn-primary" id='finish_study'
                     style="display: none;"
                     name="endofgame" value="{{ player.pk }}">
@@ -87,6 +88,7 @@ In 5 minutes, you will be given the chance to exit the study if you do not want 
             .on('finish.countdown', function (event) {
                 $('div#otree-timeout-warning').hide(duration = 0);
                 $('#finish_study').show();
+                $('#finish_study_words').show();
             });
 
 
