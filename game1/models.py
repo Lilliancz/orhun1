@@ -32,7 +32,7 @@ class Subsession(BaseSubsession):
         for p in self.get_players():
             # assign firm switching chance to 1 for 10 percent of the people
             # change the value after >= to set percentage
-            p.participant.vars['firm_switch'] = (1 if random.random() >= 0.5 else 0)
+            p.participant.vars['firm_switch'] = (1 if random.random() >= 0.85 else 0)
 
         if self.round_number == 1:
             for p in self.get_players():
